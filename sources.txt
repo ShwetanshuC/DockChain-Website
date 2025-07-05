@@ -1,0 +1,72 @@
+Typerwriter Code: https://css-tricks.com/snippets/css/typewriter-effect/
+Truck Hat Image: https://pngtree.com/freepng/orange-cap-with-transparent-background_6853291.html
+Truck Image: https://pngtree.com/freepng/truck-logo-icon-set-cargo-transportation-vehicle-front-view-vector-illustration-silhouette_20774634.html
+Ship Image: https://pngtree.com/so/simple-ship
+Django Login Interface: https://learndjango.com/tutorials/django-login-and-logout-tutorial
+
+Sign Up = Choose one of the three services = sign up = customized interface
+
+
+Trucking Company Interface:
+
+Will need to register (be stored in a database and be available to recall):
+
+1. Company Name
+
+2. Fleet of Trucks (Option to do later)
+
+3. Trucker Identities (Option to do later)
+
+4. Description of business
+
+5. Paperwork?
+
+General Interface:
+
+1. Active Jobs 
+
+2. Scheduled Jobs
+
+3. Start a new job
+
+4. Trucker Employee Database (option to add)
+
+5. Truck License Plate Database (option to add)
+
+6. Log of Past Jobs (Full and complete)
+
+
+Start Job:
+
+1. Select port location
+
+2. Pickup or dropoff
+
+3. Select assigned Trucker
+
+4. Select assigned vehicle
+
+5. ID of cargo being handled
+
+6. Description of job (request to port)
+
+7. Sends request to port and port has to approve before entry is granted
+
+Active/Scheduled Job:
+
+1. Status of whether port approved or denied
+
+2. If approved, a specific time to trigger the job
+
+3. Once time comes, job is triggered to start and gets moved to active job
+
+4. After job becomes active, worker is prompted to start and will be tracked (available for trucking company and port)
+
+5. Full status of worker shown (entry into port, license plate and fingerprint verification, drop off or pickup completion, and exit)
+
+6. After completion, animation/notification showing job is complete and job is moved into the past jobs section
+
+
+
+
+
