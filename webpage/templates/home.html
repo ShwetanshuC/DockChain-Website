@@ -1,0 +1,42 @@
+{%extends "index.html" %} 
+{%load static%}
+{%block title%} DockChain {%endblock%}
+
+{%block content%} 
+<!--Title-->
+    <div class="title">
+        <h1>DockChain</h1>
+        <h4>A novel solution for transportation inefficiencies in the cargo shipping industry.</h4>
+    </div>
+
+    <!--Login Cards-->
+    <section class="card-container">
+        <div class="card text-bg-dark cardbg">
+            <img src="{%static 'Home/Images/truckhat.png' %}" class="card-img-top" alt="Image of a truck hat">
+            <div class="card-body text-center">
+                <h5 class="card-title">Truck Drivers</h5>
+                <p class="card-text">Enjoy a central location to recieve, complete, and verify all journeys.</p>
+                <a href="#" class="btn btn-primary">Register</a>
+            </div>
+        </div>
+
+        <div class="card text-bg-dark cardbg">
+            <img src="{%static 'Home/Images/truck.png' %}" class="card-img-top" alt="Image of a truck">
+            <div class="card-body text-center">
+                <h5 class="card-title">Trucking Companies</h5>
+                <p class="card-text">Enjoy a central location to assign, track, and verify all required jobs.</p>
+                <a href="#" class="btn btn-primary">Register</a>
+            </div>
+        </div>
+
+        <div class="card text-bg-dark cardbg">
+            <img src="{%static 'Home/Images/ship.png' %}" class="card-img-top" alt="Image of a ship">
+            <div class="card-body text-center">
+                <h5 class="card-title">Port Operators</h5>
+                <p class="card-text">Enjoy a central location to recieve, locate, and verify all container jobs.</p>
+                <a href="#" class="btn btn-primary">Register</a>
+            </div>
+        </div>
+    </section>
+{%endblock%}
+

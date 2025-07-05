@@ -1,0 +1,88 @@
+body {
+    background-image: url("Images/background.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: 500; /* any value between 400 and 900 can be used */
+    font-style: normal;
+    color: white;   
+}
+
+html, body {
+  overscroll-behavior: none; /* Disables overscroll bounce */
+}
+
+.title {
+    /* Flexbox */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* horizontal centering */
+    align-items: center;       /* vertical centering */
+    height: 100vh;             /* full viewport height */
+}
+
+.title h1 {
+    font-size: 64px;
+}
+
+.title h4 {
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    border-right: .15em solid orange; /* The typwriter cursor */
+    white-space: nowrap; /* Keeps the content on a single line */
+    margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+    animation: 
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+/* Typing effect */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 50% }
+}
+
+/* Typewriter cursor effect */
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: orange; }
+}
+
+.card-container {
+    display: flex;
+    justify-content: center; /* or space-between, space-around */
+    gap: 20px;               /* spacing between cards */
+    flex-wrap: wrap;         /* allows them to wrap on smaller screens */
+    margin: 40px auto;
+}
+
+.cardbg {
+    background-color: #2f3038;
+    /*color: white; /* optional: makes text readable */
+    opacity: 0.85; /* Adjust between 0 (fully transparent) and 1 (fully opaque) */
+    transform: scale(0.85); /* scales down the card */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* soft shadow for floating effect */
+    margin: 20px auto; /* centers it and adds space */
+    width: 18rem;
+    border-radius: 1rem; /* Increase the value to make the card more rounded */
+    margin-top: -150px; /* pull the cards upward into the title section */
+    padding-top: 140px; /* ensures card content isn't clipped */
+    z-index: 2;
+    position: relative;
+}
+
+.cardbg img {
+    margin-top: -155px;   /* Pull image upward */
+    border-radius: 0.75rem; /* Optional: match the card's rounding */
+    z-index: 3;
+    position: relative;
+}
+
+.cardbg:hover {
+    transform: scale(0.88); /* subtle hover effect */
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+    background-color: rgb(147, 101, 17) !important;
+    opacity: 1;
+}
