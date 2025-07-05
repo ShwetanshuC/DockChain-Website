@@ -3,14 +3,17 @@
 {%block title%} DockChain {%endblock%}
 
 {%block content%} 
-<!--Title-->
+
+<link rel="stylesheet" href="{% static 'Home/style.css' %}">
+
+    <!--Title-->
     <div class="title">
         <h1>DockChain</h1>
         <h4>A novel solution for transportation inefficiencies in the cargo shipping industry.</h4>
     </div>
 
     <!--Login Cards-->
-    <section class="card-container">
+    <section class="card-container" id="register">
         <div class="card text-bg-dark cardbg">
             <img src="{%static 'Home/Images/truckhat.png' %}" class="card-img-top" alt="Image of a truck hat">
             <div class="card-body text-center">
