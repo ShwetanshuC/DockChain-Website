@@ -2,7 +2,14 @@
 
 {% block title %}Sign Up{% endblock %}
 
-{% block content %}
+{% block page_content %}
+
+<style>
+  body {
+    background-color: black;
+  }
+</style>
+
 <h2>Sign up</h2>
 <form method="post">
   {% csrf_token %}

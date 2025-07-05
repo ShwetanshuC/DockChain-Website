@@ -2,7 +2,7 @@
 {%load static%}
 {%block title%} DockChain {%endblock%}
 
-{%block content%} 
+{%block page_content%} 
 
 <link rel="stylesheet" href="{% static 'Home/style.css' %}">
 
@@ -19,7 +19,7 @@
             <div class="card-body text-center">
                 <h5 class="card-title">Truck Drivers</h5>
                 <p class="card-text">Enjoy a central location to recieve, complete, and verify all journeys.</p>
-                <a href="/accounts/signup" class="btn btn-primary">Register</a>
+                <a href="{%url 'signup' %}" class="btn btn-primary">Register</a>
             </div>
         </div>
 
@@ -28,7 +28,7 @@
             <div class="card-body text-center">
                 <h5 class="card-title">Trucking Companies</h5>
                 <p class="card-text">Enjoy a central location to assign, track, and verify all required jobs.</p>
-                <a href="/accounts/signup" class="btn btn-primary">Register</a>
+                <a href="{%url 'signup' %}" class="btn btn-primary">Register</a>
             </div>
         </div>
 
@@ -37,9 +37,11 @@
             <div class="card-body text-center">
                 <h5 class="card-title">Port Operators</h5>
                 <p class="card-text">Enjoy a central location to recieve, locate, and verify all container jobs.</p>
-                <a href="/accounts/signup" class="btn btn-primary">Register</a>
+                <a href="{%url 'signup' %}" class="btn btn-primary">Register</a>
             </div>
         </div>
     </section>
+
+    <script src="{% static 'Home/script.js' %}"></script>
 {%endblock%}
 

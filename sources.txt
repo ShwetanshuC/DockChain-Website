@@ -3,6 +3,8 @@ Truck Hat Image: https://pngtree.com/freepng/orange-cap-with-transparent-backgro
 Truck Image: https://pngtree.com/freepng/truck-logo-icon-set-cargo-transportation-vehicle-front-view-vector-illustration-silhouette_20774634.html
 Ship Image: https://pngtree.com/so/simple-ship
 Django Login Interface: https://learndjango.com/tutorials/django-login-and-logout-tutorial
+Django User Permissions: https://www.youtube.com/watch?v=WuyKxdLcw3w
+
 
 Sign Up = Choose one of the three services = sign up = customized interface
 

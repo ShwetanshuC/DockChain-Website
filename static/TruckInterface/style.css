@@ -1,0 +1,20 @@
+body {
+    background-color: #2f3038;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.job-actions-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.job-box {
+    height: 700px;
+}

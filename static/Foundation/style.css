@@ -1,0 +1,7 @@
+body {
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: 500; /* any value between 400 and 900 can be used */
+    font-style: normal;
+    color: white; 
+}
