@@ -4,4 +4,4 @@ from .models import trucker
 class TruckerForm(forms.ModelForm):
     class Meta:
         model = trucker
-        fields = ['name', 'description']
+        fields = ['firstname', 'lastname', 'role']

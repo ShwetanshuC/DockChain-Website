@@ -28,3 +28,16 @@ def truckmanagement(request):
         form = TruckerForm()
 
     return render(request, "interface1.html", {'truckers': truckers, 'form': form})
+
+def driverdirectory(request): 
+    truckers = trucker.objects.all().order_by('-date_posted')
+    
+    if request.method == 'POST':
+        form = TruckerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('driverdirectory')
+    else:
+        form = TruckerForm()
+
+    return render(request, "driverdirectory.html", {'truckers': truckers, 'form': form})
