@@ -13,3 +13,19 @@ class SignUpView(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
+
+from django.db.models import Q
+from truckmanagement.models import trucker
+
+def search_truckers(request):
+    query = request.GET.get("q")
+    results = []
+
+    if query:
+        results = trucker.objects.filter(
+            Q(firstname__icontains=query) |
+            Q(lastname__icontains=query) |
+            Q(role__icontains=query)
+        )
+
+    return render(request, "search_results.html", {"results": results, "query": query})

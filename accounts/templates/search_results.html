@@ -1,0 +1,20 @@
+
+
+{% extends "base.html" %}
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="text-center">Search Results for "{{ query }}"</h2>
+    <div class="mt-4">
+      {% if results %}
+        {% for trucker in results %}
+          <div class="card mb-3 p-3">
+            <strong>{{ trucker.firstname }} {{ trucker.lastname }}</strong><br>
+            Role: {{ trucker.role }}
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-muted text-center">No matching truckers found.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

@@ -3,8 +3,11 @@
 {% block title %}Driver Directory{% endblock %} 
 
 {%block interface_content%}
-<!-- Bootstrap row for responsive layout of trucker cards -->
-        <div class="row g-2 justify-content-center">
+
+<link rel="stylesheet" href="{% static 'DriverDirectory/style.css' %}">
+
+<div class="page-top-buffer container">
+  <div class="row g-2 justify-content-center" id="trucker-cards">
           {% for trucker in truckers %} <!-- Loop through all truckers -->
             <!-- Each trucker gets a small Bootstrap card -->
             <div class="col-12 col-md-10 col-lg-8">
@@ -21,7 +24,7 @@
                         <i class="bi bi-pencil"></i>
                       </button>
                       <!-- Delete Button -->
-                      <form method="POST" action="{% url 'delete_trucker' trucker.id %}" style="display: inline;">
+                      <form method="POST" action="{% url 'delete_trucker' trucker.id %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this trucker?');">
                           <i class="bi bi-trash"></i>
@@ -55,7 +58,8 @@
             <!-- Message shown if no truckers are available -->
             <p class="text-muted text-center">No truckers available.</p>
           {% endfor %}
-        </div>
+  </div> <!-- Close row -->
+</div> <!-- Close page-top-buffer -->
 
         <!-- Form to add a new trucker -->
         <form method="POST">
@@ -73,16 +77,6 @@
           <button type="submit" class="btn btn-primary">Add Trucker</button>
         </form>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.edit-button').forEach(button => {
-      button.addEventListener('click', function () {
-        const cardBody = this.closest('.card-body');
-        cardBody.querySelector('.display-mode').classList.add('d-none');
-        cardBody.querySelector('.edit-form').classList.remove('d-none');
-      });
-    });
-  });
-</script>
+<script src="{%static 'DriverDirectory/script.js' %}"></script>
 
 {%endblock%}
