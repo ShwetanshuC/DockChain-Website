@@ -10,12 +10,13 @@
 #include "secrets.h"
 #include "ThingSpeak.h"  // always include thingspeak header file after other header files and custom macros
 
+
 #define HIDDEN_SSID "seahawkguest"		// replace MySSID with your WiFi network name
 #define HIDDEN_PASS "none"	// replace MyPassword with your WiFi password
 
 #define CH_ID_1 3004321			// replace 0000000 with your channel number
 #define WRITE_APIKEY "RLZVGP2KW5T7SNFW"   
-#define READ_APIKEY "AS81JAIZZDWQWWUS" 
+#define READ_APIKEY "AS81JAIZZDWQWWUS"  
 
 char ssid[] = HIDDEN_SSID;  //  your network SSID (name)
 // char pass[] = HIDDEN_PASS;   // your network password
@@ -28,8 +29,8 @@ const char* readAPIKey = READ_APIKEY;
 /*
 #if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
 // For UNO and others without hardware serial, we must use software serial
-// ----------------------> pin #2 is IN from sensor (GREEN wire) <----------------------
-// ----------------------> pin #3 is OUT from arduino  (WHITE wire) <----------------------
+// ----------------------> pin #6 is IN from sensor (GREEN wire) <----------------------
+// ----------------------> pin #7 is OUT from arduino  (WHITE wire) <----------------------
 // Set up the serial port to use softwareserial..*/
 SoftwareSerial mySerial(6, 7);
 /*
@@ -42,21 +43,25 @@ SoftwareSerial mySerial(6, 7);
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 void setup() {
-  while (!Serial)
-    ;
   Serial.begin(9600);
-  Serial.println("Fingerprint template extractor");
+  for (int x = 0;x<100;x++) {
+  Serial.println("yadayadayada");}
 
   // set the data rate for the sensor serial port
   finger.begin(57600);
+  delay(5);
+  Serial.println("past finger");
+  /*
+  bool fin = finger.verifyPassword();
+  Serial.println("past finger");
+  Serial.println(fin);
 
   if (finger.verifyPassword()) {
     Serial.println("Found fingerprint sensor!");
   } else {
     Serial.println("Did not find fingerprint sensor :(");
-    while (1)
-      ;
   }
+  */
 
   // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE) {
@@ -67,9 +72,7 @@ void setup() {
   }
 
   String fv = WiFi.firmwareVersion();
-  if (fv != "1.0.0") {
-    Serial.println("Please upgrade the firmware");
-  }
+  Serial.println(fv);
 
   ThingSpeak.begin(client);  //Initialize ThingSpeak
 }
@@ -85,8 +88,7 @@ uint8_t readnumber(void) {
   return num;
 }
 
-void loop() { /*
-
+void loop() { 
   // Connect or reconnect to WiFi
   if(WiFi.status() != WL_CONNECTED){
     Serial.print("Attempting to connect to SSID: ");
@@ -99,23 +101,23 @@ void loop() { /*
     Serial.println("\nConnected.");
   }
   
-  id = 1  // the current fingerprint is always the 1st one
+  int id = 1  // the current fingerprint is always the 1st one
   Serial.print("Enrolling ID #");
   Serial.println(id);
 
   getFingerprintEnroll();
 
   // Get template for first fingerprint, which should be the only one
-  std::string savePrint = downloadFingerprintTemplate(1);
+  int stringPrint = downloadFingerprintTemplate(id);
 
   // read fingerprint database
    // Read in field 1 of the private channel which is a counter  
-  vector<String> fingerData = ThingSpeak.readStringField(currentChannelNumber, 1, readAPIKey);  
+  std::string fingerData = ThingSpeak.readStringField(currentChannelNumber, 1, readAPIKey);  
 
    // Check the status of the read operation to see if it was successful
-  statusCode = ThingSpeak.getLastReadStatus();
+  int statusCode = ThingSpeak.getLastReadStatus();
   if(statusCode == 200){
-    Serial.println("Counter: " + String(count));
+    Serial.println("yay!");
   }
   else{
     Serial.println("Problem reading channel. HTTP error code " + String(statusCode)); 
@@ -128,7 +130,7 @@ void loop() { /*
   std::string fingerStringID = std::to_string(fingerprintID);
   fingerStringID.insert(0, 20-(fingerStringID.length()), '0');
 
-  fingerData.push_back(std::to_string({fingerStringID : savePrint}));
+  fingerData.append(std::to_string({fingerStringID : stringPrint}));
 
   // transmit hex code to Thingspeak database for further storage & identification
 
@@ -145,8 +147,7 @@ void loop() { /*
   */
 }
 
-uint8_t downloadFingerprintTemplate() {
-  int id = 1;
+uint8_t downloadFingerprintTemplate(int id) { 
   Serial.println("------------------------------------");
   Serial.print("Attempting to load #");
   Serial.println(1);
