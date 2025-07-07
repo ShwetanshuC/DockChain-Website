@@ -10,6 +10,13 @@
 #include "secrets.h"
 #include "ThingSpeak.h"  // always include thingspeak header file after other header files and custom macros
 
+#define HIDDEN_SSID "seahawkguest"		// replace MySSID with your WiFi network name
+#define HIDDEN_PASS "none"	// replace MyPassword with your WiFi password
+
+#define CH_ID_1 3004321			// replace 0000000 with your channel number
+#define WRITE_APIKEY "RLZVGP2KW5T7SNFW"   
+#define READ_APIKEY "AS81JAIZZDWQWWUS" 
+
 char ssid[] = HIDDEN_SSID;  //  your network SSID (name)
 // char pass[] = HIDDEN_PASS;   // your network password
 int keyIndex = 0;  // your network key Index number (needed only for WEP)
