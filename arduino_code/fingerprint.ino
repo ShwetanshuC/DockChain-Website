@@ -1,34 +1,35 @@
 #include <Adafruit_Fingerprint.h>
+#include <SoftwareSerial.h>
 
-#include "comparison.h" // compareHexVectors(vector1, vector2)
+#include "comparison.h"  // compareHexVectors(vector1, vector2)
 
 #include <vector>
 
-#include <WiFiNINA.h>
+#include <WiFiS3.h>
+#include <WifiClient.h>
 #include "secrets.h"
-#include "ThingSpeak.h" // always include thingspeak header file after other header files and custom macros
+#include "ThingSpeak.h"  // always include thingspeak header file after other header files and custom macros
 
-char ssid[] = HIDDEN_SSID;    //  your network SSID (name) 
-char pass[] = HIDDEN_PASS;   // your network password
-int keyIndex = 0;            // your network key Index number (needed only for WEP)
-WiFiClient  client;
+char ssid[] = HIDDEN_SSID;  //  your network SSID (name)
+// char pass[] = HIDDEN_PASS;   // your network password
+int keyIndex = 0;  // your network key Index number (needed only for WEP)
+WiFiClient client;
 
 unsigned long currentChannelNumber = CH_ID_1;
-const char * writeAPIKey = WRITE_APIKEY;
+const char* writeAPIKey = WRITE_APIKEY;
+const char* readAPIKey = READ_APIKEY;
 /*
 #if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
 // For UNO and others without hardware serial, we must use software serial
 // ----------------------> pin #2 is IN from sensor (GREEN wire) <----------------------
 // ----------------------> pin #3 is OUT from arduino  (WHITE wire) <----------------------
 // Set up the serial port to use softwareserial..*/
-SoftwareSerial mySerial(2, 3);
+SoftwareSerial mySerial(6, 7);
 /*
 #else
 // On Leonardo/M0/etc, others with hardware serial, use hardware serial!
 // #0 is green wire, #1 is white
 #define mySerial Serial1*/
-
-#endif
 
 
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
@@ -49,19 +50,20 @@ void setup() {
     while (1)
       ;
   }
-  
+
   // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE) {
     Serial.println("Communication with WiFi module failed!");
     // don't continue
-    while (true);
+    while (true)
+      ;
   }
 
   String fv = WiFi.firmwareVersion();
   if (fv != "1.0.0") {
     Serial.println("Please upgrade the firmware");
   }
-    
+
   ThingSpeak.begin(client);  //Initialize ThingSpeak
 }
 
@@ -76,14 +78,14 @@ uint8_t readnumber(void) {
   return num;
 }
 
-void loop() {
+void loop() { /*
 
   // Connect or reconnect to WiFi
   if(WiFi.status() != WL_CONNECTED){
     Serial.print("Attempting to connect to SSID: ");
-    Serial.println(SECRET_SSID);
+    Serial.println(HIDDEN_SSID);
     while(WiFi.status() != WL_CONNECTED){
-      WiFi.begin(ssid, pass); // Connect to WPA/WPA2 network. Change this line if using open or WEP network
+      WiFi.begin(ssid); // Connect to WPA/WPA2 network. Change this line if using open or WEP network
       Serial.print(".");
       delay(5000);     
     } 
@@ -97,11 +99,11 @@ void loop() {
   getFingerprintEnroll();
 
   // Get template for first fingerprint, which should be the only one
-  vector<string> savePrint = downloadFingerprintTemplate(1);
+  std::string savePrint = downloadFingerprintTemplate(1);
 
   // read fingerprint database
    // Read in field 1 of the private channel which is a counter  
-  vector<String> fingerData = ThingSpeak.readStringField(currentChannelNumber, counterFieldNumber, myCounterReadAPIKey);  
+  vector<String> fingerData = ThingSpeak.readStringField(currentChannelNumber, 1, readAPIKey);  
 
    // Check the status of the read operation to see if it was successful
   statusCode = ThingSpeak.getLastReadStatus();
@@ -114,14 +116,16 @@ void loop() {
 
   // create random fingerprint ID
 
-  int fingerprintID = rand() % 10000000000000000000
+  int fingerprintID = rand() % 10000000000000000000;
 
-  fingerprintID = 
+  std::string fingerStringID = std::to_string(fingerprintID);
+  fingerStringID.insert(0, 20-(fingerStringID.length()), '0');
 
-  fingerData.push_back({})
+  fingerData.push_back(std::to_string({fingerStringID : savePrint}));
+
   // transmit hex code to Thingspeak database for further storage & identification
 
-  int x = ThingSpeak.writeField(currentChannelNumber, 1, savePrint, writeAPIKey);
+  int x = ThingSpeak.writeField(currentChannelNumber, 1, fingerData, writeAPIKey);
 
   if(x == 200){
     Serial.println("Channel update successful.");
@@ -131,17 +135,19 @@ void loop() {
   }
   // clear location of fingerprint
   finger.deleteModel(1);
+  */
 }
 
-uint8_t downloadFingerprintTemplate(uint16_t id) {
+uint8_t downloadFingerprintTemplate() {
+  int id = 1;
   Serial.println("------------------------------------");
   Serial.print("Attempting to load #");
-  Serial.println(id);
-  uint8_t p = finger.loadModel(id);
+  Serial.println(1);
+  uint8_t p = finger.loadModel(1);
   switch (p) {
     case FINGERPRINT_OK:
       Serial.print("Template ");
-      Serial.print(id);
+      Serial.print(1);
       Serial.println(" loaded");
       break;
     case FINGERPRINT_PACKETRECIEVEERR:
@@ -156,12 +162,12 @@ uint8_t downloadFingerprintTemplate(uint16_t id) {
   // OK success!
 
   Serial.print("Attempting to get #");
-  Serial.println(id);
+  Serial.println(1);
   p = finger.getModel();
   switch (p) {
     case FINGERPRINT_OK:
       Serial.print("Template ");
-      Serial.print(id);
+      Serial.print(1);
       Serial.println(" transferring:");
       break;
     default:
@@ -197,14 +203,14 @@ uint8_t downloadFingerprintTemplate(uint16_t id) {
   index += 256;                                                // advance pointer
   memcpy(fingerTemplate + index, bytesReceived + uindx, 256);  // second 256 bytes
 
-  vector<string> hexver;
+  std::vector<std::string> hexver;
   for (int i = 0; i < 512; ++i) {
     //Serial.print("0x");
-    hexver.pushBack(getHex(fingerTemplate[i], 2));
+    hexver.push_back(getHex(fingerTemplate[i], 2));
     //Serial.print(", ");
   }
 
-  return hexver;
+  //Serial.print(hexver);            <-----------------------
 
   /*
     uint8_t templateBuffer[256];
@@ -235,7 +241,7 @@ uint8_t downloadFingerprintTemplate(uint16_t id) {
     }*/
 }
 
-void printHex(int num, int precision) {
+std::string getHex(int num, int precision) {
   char tmp[16];
   char format[128];
 
@@ -249,7 +255,7 @@ uint8_t getFingerprintEnroll() {
 
   int p = -1;
   Serial.print("Waiting for valid finger to enroll as #");
-  Serial.println(id);
+  Serial.println(1);
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
@@ -302,7 +308,7 @@ uint8_t getFingerprintEnroll() {
     p = finger.getImage();
   }
   Serial.print("ID ");
-  Serial.println(id);
+  Serial.println(1);
   p = -1;
   Serial.println("Place same finger again");
   while (p != FINGERPRINT_OK) {
@@ -352,7 +358,7 @@ uint8_t getFingerprintEnroll() {
 
   // OK converted!
   Serial.print("Creating model for #");
-  Serial.println(id);
+  Serial.println(1);
 
   p = finger.createModel();
   if (p == FINGERPRINT_OK) {
@@ -369,8 +375,8 @@ uint8_t getFingerprintEnroll() {
   }
 
   Serial.print("ID ");
-  Serial.println(id);
-  p = finger.storeModel(id);
+  Serial.println(1);
+  p = finger.storeModel(1);
   if (p == FINGERPRINT_OK) {
     Serial.println("Stored!");
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
