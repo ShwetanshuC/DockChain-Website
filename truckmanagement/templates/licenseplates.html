@@ -1,0 +1,67 @@
+{% extends "base.html" %} 
+{% load static %}
+{% block title %}Driver Directory{% endblock %} 
+
+{%block interface_content%}
+
+<link rel="stylesheet" href="{% static 'DriverDirectory/style.css' %}">
+
+<!-- Form to add a new license plate -->
+<form method="POST">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="add_plate">
+  <div class="mb-3">
+    <input type="text" name="state" class="form-control" placeholder="State (e.g., NC)" required>
+  </div>
+  <div class="mb-3">
+    <input type="text" name="plate_number" class="form-control" placeholder="Plate Number (e.g., ABC1234)" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Add License Plate</button>
+</form>
+
+<!-- License plates display -->
+<div class="page-top-buffer container">
+  <div class="row g-2 justify-content-center">
+    {% for plate in license_plates %}
+      <div class="col-12 col-md-10 col-lg-8">
+        <div class="card shadow-sm">
+          <div class="card-body p-3">
+            <div class="display-mode">
+              <h6 class="card-title mb-1">{{ plate.plate_number }}</h6>
+              <p class="card-text mb-1">State: {{ plate.state }}</p>
+              <small class="text-muted">{{ plate.date_added }}</small>
+              <div class="float-end">
+                <button type="button" class="btn btn-link p-0 edit-button"><i class="bi bi-pencil-square"></i></button>
+                <form method="POST" class="d-inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="delete_plate">
+                  <input type="hidden" name="plate_id" value="{{ plate.id }}">
+                  <button type="submit" class="btn btn-link p-0 text-danger"><i class="bi bi-trash"></i></button>
+                </form>
+              </div>
+            </div>
+
+            <form method="POST" class="edit-form d-none">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="edit_plate">
+              <input type="hidden" name="plate_id" value="{{ plate.id }}">
+              <div class="mb-2">
+                <input type="text" name="plate_number" class="form-control" value="{{ plate.plate_number }}" required>
+              </div>
+              <div class="mb-2">
+                <input type="text" name="state" class="form-control" value="{{ plate.state }}" required>
+              </div>
+              <button type="submit" class="btn btn-sm btn-success">Save</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-muted text-center">No license plates available.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<script src="{%static 'DriverDirectory/script.js' %}"></script>
+
+{%endblock%}

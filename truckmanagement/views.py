@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import trucker
-from .forms import TruckerForm
+from .models import trucker, LicensePlate
+from .forms import TruckerForm, LicensePlateForm
 from django.shortcuts import get_object_or_404
 
 def trucker_list(request):
@@ -64,3 +64,18 @@ def delete_trucker(request, id):
         trucker_to_delete = get_object_or_404(trucker, id=id)
         trucker_to_delete.delete()
     return redirect('driverdirectory')
+
+
+# View for license plates
+def licenseplates(request):
+    license_plates = LicensePlate.objects.all().order_by('-date_added')
+
+    if request.method == 'POST' and request.POST.get('action') == 'add_plate':
+        form = LicensePlateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('licenseplates')
+    else:
+        form = LicensePlateForm()
+
+    return render(request, "licenseplates.html", {'license_plates': license_plates, 'form': form})

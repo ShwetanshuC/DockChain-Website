@@ -1,7 +1,16 @@
 def nav_items(request):
+    path = request.path
+    if path == "/truckmanagement/":
+        center = {"label": "Home", "url": "/truckmanagement/"}
+        left = [{"label": "Driver Directory", "url": "/truckmanagement/driverdirectory/"}]
+    elif path.startswith("/truckmanagement/driverdirectory"):
+        center = {"label": "Driver Directory", "url": "/truckmanagement/driverdirectory/"}
+        left = [{"label": "Home", "url": "/truckmanagement/"}]
+    else:
+        center = {"label": "Home", "url": "/truckmanagement/"}
+        left = [{"label": "Driver Directory", "url": "/truckmanagement/driverdirectory/"}]
+
     return {
-        "nav_items": [
-            {"label": "Home", "center": request.path == "/"},
-            {"label": "Driver Directory", "center": request.path.startswith("/truckmanagement/driverdirectory")}
-        ]
+        "center_item": center,
+        "left_items": left
     }

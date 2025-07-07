@@ -12,11 +12,9 @@
     <a class="navbar-brand" href="/">
       <img src="{% static 'Home/Images/ship.png' %}" alt="Bootstrap" width="30" height="24">
     </a>
-    {% for item in nav_items %}
-      {% if item.center %}
-        <span class="position-absolute start-50 translate-middle-x fw-semibold maintitle">{{ item.label }}</span>
-      {% endif %}
-    {% endfor %}
+    {% if center_item %}
+      <span class="position-absolute start-50 translate-middle-x fw-semibold maintitle">{{ center_item.label }}</span>
+    {% endif %}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -24,26 +22,11 @@
     <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
       <div class="d-flex align-items-center w-100">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" onclick="event.preventDefault();">
-              Dropdown
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-          </li>
+          {% for item in left_items %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ item.url }}">{{ item.label }}</a>
+            </li>
+          {% endfor %}
         </ul>
         <form class="d-flex" role="search" method="get" action="{% url 'search_truckers' %}">
           <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search"/>

@@ -6,6 +6,23 @@
 
 <link rel="stylesheet" href="{% static 'DriverDirectory/style.css' %}">
 
+<!-- Form to add a new trucker -->
+<form method="POST">
+{% csrf_token %}
+<input type="hidden" name="action" value="add">
+<div class="mb-3">
+  <input type="text" name="firstname" class="form-control" placeholder="First Name" required>
+</div>
+<div class="mb-3">
+  <input type="text" name="lastname" class="form-control" placeholder="Last Name" required>
+</div>
+<div class="mb-3">
+  <input type="text" name="role" class="form-control" placeholder="Role" required>
+</div>
+<button type="submit" class="btn btn-primary">Add Trucker</button>
+</form>
+
+
 <div class="page-top-buffer container">
   <div class="row g-2 justify-content-center" id="trucker-cards">
           {% for trucker in truckers %} <!-- Loop through all truckers -->
@@ -60,22 +77,6 @@
           {% endfor %}
   </div> <!-- Close row -->
 </div> <!-- Close page-top-buffer -->
-
-        <!-- Form to add a new trucker -->
-        <form method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="action" value="add">
-          <div class="mb-3">
-            <input type="text" name="firstname" class="form-control" placeholder="First Name" required>
-          </div>
-          <div class="mb-3">
-            <input type="text" name="lastname" class="form-control" placeholder="Last Name" required>
-          </div>
-          <div class="mb-3">
-            <input type="text" name="role" class="form-control" placeholder="Role" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Add Trucker</button>
-        </form>
 
 <script src="{%static 'DriverDirectory/script.js' %}"></script>
 
