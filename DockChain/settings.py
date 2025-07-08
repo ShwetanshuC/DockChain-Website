@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'webpage',
     'accounts',
     'truckmanagement',
-
+    'Driver',
+    
 ]
 
 MIDDLEWARE = [

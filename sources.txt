@@ -76,6 +76,7 @@ FIXING FOR UI:
 Live search bar properly for license plates as well and working nicely at the home screen
 Login authentication and redirect page
 CSS for truck interface
+NAVBAR needs to detect which user permission there is and show the appropriate search bar
 
 
 
