@@ -7,23 +7,12 @@ document.addEventListener("DOMContentLoaded", function () {
       dd.toggle();
     });
   }
-
-  const searchInput = document.querySelector('input[type="search"]');
-  const cardsContainer = document.getElementById('trucker-cards') || document.getElementById('license-plate-cards');
-
-  if (searchInput && cardsContainer) {
-    searchInput.addEventListener('input', function () {
-      const query = this.value.toLowerCase();
-      const cards = cardsContainer.querySelectorAll('.card');
-
-      cards.forEach(card => {
-        const cardText = card.innerText.toLowerCase();
-        if (cardText.includes(query)) {
-          card.style.display = '';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+  const startJobDropdown = document.getElementById("startJobDropdown");
+  if (startJobDropdown && typeof bootstrap !== 'undefined') {
+    const startJobMenu = new bootstrap.Dropdown(startJobDropdown);
+    startJobDropdown.addEventListener('click', function (event) {
+      event.preventDefault();
+      startJobMenu.toggle();
     });
   }
 });

@@ -27,6 +27,35 @@
               <a class="nav-link" href="{{ item.url }}">{{ item.label }}</a>
             </li>
           {% endfor %}
+          <li class="nav-item dropdown">
+            <button class="btn btn-primary dropdown-toggle ms-2" type="button" id="startJobDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              Start a Job
+            </button>
+            <div class="dropdown-menu p-3" aria-labelledby="startJobDropdown" style="min-width: 300px;">
+              <form method="post" action="/start-job/">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="driverSelect" class="form-label">Select Driver</label>
+                  <select class="form-select" id="driverSelect" name="driver_id" required>
+                    <option value="" disabled selected>Choose a driver</option>
+                    {% for driver in drivers %}
+                      <option value="{{ driver.id }}">{{ driver.firstname }} {{ driver.lastname }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="plateSelect" class="form-label">Select License Plate</label>
+                  <select class="form-select" id="plateSelect" name="plate_id" required>
+                    <option value="" disabled selected>Choose a plate</option>
+                    {% for plate in plates %}
+                      <option value="{{ plate.id }}">{{ plate.state }} - {{ plate.plate_number }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Start</button>
+              </form>
+            </div>
+          </li>
         </ul>
         <form class="d-flex" role="search" method="get" 
               action="{% if 'fleet' in center_item.label|lower %}
