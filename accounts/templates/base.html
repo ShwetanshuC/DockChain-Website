@@ -38,16 +38,17 @@
                   <label for="driverSelect" class="form-label">Select Driver</label>
                   <select class="form-select" id="driverSelect" name="driver_id" required>
                     <option value="" disabled selected>Choose a driver</option>
-                    {% for driver in drivers %}
-                      <option value="{{ driver.id }}">{{ driver.firstname }} {{ driver.lastname }}</option>
+                    {% for trucker in truckers %}
+                      <option value="{{ trucker.id }}">{{ trucker.firstname }} {{ trucker.lastname }}</option>
                     {% endfor %}
                   </select>
                 </div>
+                {% csrf_token %}
                 <div class="mb-3">
                   <label for="plateSelect" class="form-label">Select License Plate</label>
                   <select class="form-select" id="plateSelect" name="plate_id" required>
                     <option value="" disabled selected>Choose a plate</option>
-                    {% for plate in plates %}
+                    {% for plate in license_plates %}
                       <option value="{{ plate.id }}">{{ plate.state }} - {{ plate.plate_number }}</option>
                     {% endfor %}
                   </select>
