@@ -71,4 +71,12 @@ Active/Scheduled Job:
 
 
 
+FIXING FOR UI:
+
+Live search bar properly for license plates as well and working nicely at the home screen
+Login authentication and redirect page
+CSS for truck interface
+
+
+
 
