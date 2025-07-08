@@ -70,12 +70,28 @@ def delete_trucker(request, id):
 def licenseplates(request):
     license_plates = LicensePlate.objects.all().order_by('-date_added')
 
-    if request.method == 'POST' and request.POST.get('action') == 'add_plate':
-        form = LicensePlateForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('licenseplates')
-    else:
-        form = LicensePlateForm()
+    if request.method == 'POST':
+        action = request.POST.get('action')
 
+        if action == 'add_plate':
+            form = LicensePlateForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('licenseplates')
+
+        elif action == 'edit_plate':
+            plate_id = request.POST.get('plate_id')
+            plate = get_object_or_404(LicensePlate, id=plate_id)
+            plate.state = request.POST.get('state')
+            plate.plate_number = request.POST.get('plate_number')
+            plate.save()
+            return redirect('licenseplates')
+
+        elif action == 'delete_plate':
+            plate_id = request.POST.get('plate_id')
+            plate = get_object_or_404(LicensePlate, id=plate_id)
+            plate.delete()
+            return redirect('licenseplates')
+
+    form = LicensePlateForm()
     return render(request, "licenseplates.html", {'license_plates': license_plates, 'form': form})

@@ -29,3 +29,23 @@ def search_truckers(request):
         )
 
     return render(request, "search_results.html", {"results": results, "query": query})
+
+from truckmanagement.models import LicensePlate  # adjust the model name if needed
+from truckmanagement.forms import LicensePlateForm  # Ensure this import is present
+
+def search_license_plates(request):
+    query = request.GET.get("q")
+    license_plates = []
+
+    if query:
+        license_plates = LicensePlate.objects.filter(
+            Q(state__icontains=query) |
+            Q(plate_number__icontains=query)
+        )
+
+    form = LicensePlateForm()
+    return render(request, "licenseplates.html", {
+        "license_plates": license_plates,
+        "query": query,
+        "form": form
+    })

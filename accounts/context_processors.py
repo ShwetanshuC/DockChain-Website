@@ -1,16 +1,24 @@
 def nav_items(request):
+    nav_options = [
+        {"label": "Home", "url": "/truckmanagement/"},
+        {"label": "Driver Directory", "url": "/truckmanagement/driverdirectory/"},
+        {"label": "Fleet identification", "url": "/truckmanagement/licenseplates/"}
+    ]
+
     path = request.path
-    if path == "/truckmanagement/":
-        center = {"label": "Home", "url": "/truckmanagement/"}
-        left = [{"label": "Driver Directory", "url": "/truckmanagement/driverdirectory/"}]
-    elif path.startswith("/truckmanagement/driverdirectory"):
-        center = {"label": "Driver Directory", "url": "/truckmanagement/driverdirectory/"}
-        left = [{"label": "Home", "url": "/truckmanagement/"}]
-    else:
-        center = {"label": "Home", "url": "/truckmanagement/"}
-        left = [{"label": "Driver Directory", "url": "/truckmanagement/driverdirectory/"}]
+    center = None
+    left = []
+
+    for option in nav_options:
+        if path.startswith(option["url"]):
+            center = option
+        else:
+            left.append(option)
+
+    # Sort left so "Home" appears first if it's not the center
+    left_sorted = sorted(left, key=lambda x: 0 if x["label"] == "Home" else 1)
 
     return {
-        "center_item": center,
-        "left_items": left
+        "center_item": center or nav_options[0],
+        "left_items": [item for item in nav_options if item != (center or nav_options[0])]
     }
