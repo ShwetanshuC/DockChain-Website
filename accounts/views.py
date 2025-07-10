@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse
+from django.http import HttpResponseRedirect
 
 def success(request): 
     return render(request, "success.html")
@@ -18,18 +19,22 @@ class SignUpView(CreateView):
 # Distinct sign up views for each user role
 class TruckDriverSignUpView(CreateView):
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy("login")
     template_name = "registration/driver_signup.html"
+
+    def get_success_url(self):
+        return "/driverinterface/"
+
+    def form_valid(self, form):
+        user = form.save()
+        group = Group.objects.get(name="Driver")
+        user.groups.add(group)
+        login(self.request, user)
+        return HttpResponseRedirect(self.get_success_url())
 
 class TruckCompanySignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/truck_company_signup.html"
-
-class PortSignUpView(CreateView):
-    form_class = CustomUserCreationForm
-    success_url = reverse_lazy("login")
-    template_name = "registration/port_signup.html"
 
 from django.db.models import Q
 from django.contrib.auth.models import Group
@@ -74,43 +79,27 @@ def search_license_plates(request):
 class TruckCompanySignUpView(CreateView):
     form_class = CustomUserCreationForm
     template_name = "registration/truck_company_signup.html"
-    success_url = reverse_lazy("login")
+    # Remove success_url attribute since form_valid uses get_success_url
+    def get_success_url(self):
+        return "/truckmanagement/"
 
     def form_valid(self, form):
         user = form.save()
         group = Group.objects.get(name="Trucking Company")
         user.groups.add(group)
         login(self.request, user)
-        return super().form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
     
 
 # Port Operator Sign Up View
 class PortSignUpView(CreateView):
     form_class = CustomUserCreationForm
     template_name = "registration/port_signup.html"
-    success_url = reverse_lazy("login")
-
+    def get_success_url(self):
+        return "/portinterface/"
     def form_valid(self, form):
         user = form.save()
         group = Group.objects.get(name="Port")
         user.groups.add(group)
-        return super().form_valid(form)
-
-# TruckDriverSignUpView: Assigns new users to the "Driver" group and logs them in.
-from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy
-from django.contrib.auth import login
-from django.contrib.auth.models import Group
-from accounts.forms import CustomUserCreationForm
-
-class TruckDriverSignUpView(CreateView):
-    form_class = CustomUserCreationForm
-    template_name = "registration/driver_signup.html"
-    success_url = reverse_lazy("login")
-
-    def form_valid(self, form):
-        user = form.save()
-        group = Group.objects.get(name="Driver")
-        user.groups.add(group)
         login(self.request, user)
-        return super().form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
