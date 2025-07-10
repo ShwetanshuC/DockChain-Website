@@ -79,7 +79,13 @@ CSS for truck interface
 NAVBAR needs to detect which user permission there is and show the appropriate search bar
 
 
-Template for sign up
+Unauthorized page 
 
+If logged in to a different kind of account:
 
+Your account is not authorized to view this page
+
+Option to Log out, visit the correct interface, or log in to an account with the correct permissions
+
+Reloading the unauthorized page should check if the user is logged in
 
