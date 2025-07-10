@@ -79,5 +79,7 @@ CSS for truck interface
 NAVBAR needs to detect which user permission there is and show the appropriate search bar
 
 
+Template for sign up
+
 
 

@@ -1,10 +1,17 @@
 from django.urls import path
 from . import views
-from .views import SignUpView
+from .views import (
+    SignUpView,
+    TruckDriverSignUpView,
+    TruckCompanySignUpView,
+    PortSignUpView,
+)
 
 urlpatterns = [
     path("success/", views.success, name='success'),
-    path("signup/", SignUpView.as_view(), name="signup"),
+    path("signup/driver/", TruckDriverSignUpView.as_view(), name="signup_driver"),
+    path("signup/company/", TruckCompanySignUpView.as_view(), name="signup_company"),
+    path("signup/port/", PortSignUpView.as_view(), name="signup_port"),
     path("search/", views.search_truckers, name="search_truckers"),
     path("search_license_plates/", views.search_license_plates, name="search_license_plates"),
 ]
