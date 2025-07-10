@@ -41,8 +41,11 @@ INSTALLED_APPS = [
     'accounts',
     'truckmanagement',
     'Driver',
+    'Port',
     
 ]
+
+AUTH_USER_MODEL = 'accounts.User' #sets the default user model to the user model in accounts
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

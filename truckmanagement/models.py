@@ -16,3 +16,11 @@ class LicensePlate(models.Model):
 
     def __str__(self):
         return f"{self.state} - {self.plate_number}"
+    
+class Job(models.Model):
+    driver = models.ForeignKey(trucker, on_delete=models.CASCADE)
+    license_plate = models.ForeignKey(LicensePlate, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)  # store when the job was started
+
+    def __str__(self):
+        return f"{self.driver.firstname} {self.driver.lastname} - {self.license_plate.plate_number}"

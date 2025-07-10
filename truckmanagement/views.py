@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import trucker, LicensePlate
-from .forms import TruckerForm, LicensePlateForm
+from .models import trucker, LicensePlate, Job
+from .forms import TruckerForm, LicensePlateForm, JobForm
 from django.shortcuts import get_object_or_404
 
 def trucker_list(request):
@@ -95,3 +95,21 @@ def licenseplates(request):
 
     form = LicensePlateForm()
     return render(request, "licenseplates.html", {'license_plates': license_plates, 'form': form})
+
+
+#start job
+def start_job(request):
+    if request.method == 'POST' and request.POST.get('action') == 'start_job':
+        driver_id = request.POST.get('trucker_id')
+        plate_id = request.POST.get('plate_id')
+
+        print(driver_id, plate_id)
+
+        if driver_id and plate_id:
+            driver_obj = get_object_or_404(trucker, id=driver_id)
+            plate_obj = get_object_or_404(LicensePlate, id=plate_id)
+            form = JobForm(driver=driver_obj, license_plate=plate_obj)
+            if form.is_valid():
+                form.save()
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))

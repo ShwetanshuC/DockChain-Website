@@ -28,34 +28,51 @@
             </li>
           {% endfor %}
           <li class="nav-item dropdown">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add">
             <button class="btn btn-primary dropdown-toggle ms-2" type="button" id="startJobDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               Start a Job
             </button>
             <div class="dropdown-menu p-3" aria-labelledby="startJobDropdown" style="min-width: 300px;">
-              <form method="post" action="/start-job/">
+              <form method="POST">
                 {% csrf_token %}
+                <input type="hidden" name="action" value="start_job">
                 <div class="mb-3">
                   <label for="driverSelect" class="form-label">Select Driver</label>
-                  <select class="form-select" id="driverSelect" name="driver_id" required>
+                  <select class="form-select" id="driverSelect" name="driver" required>
                     <option value="" disabled selected>Choose a driver</option>
                     {% for trucker in truckers %}
-                      <option value="{{ trucker.id }}">{{ trucker.firstname }} {{ trucker.lastname }}</option>
+                      <option name="trucker_id" value="{{ trucker.id }}">{{ trucker.firstname }} {{ trucker.lastname }}</option>
                     {% endfor %}
                   </select>
                 </div>
-                
-                {% csrf_token %}
+  
                 <div class="mb-3">
                   <label for="plateSelect" class="form-label">Select License Plate</label>
-                  <select class="form-select" id="plateSelect" name="plate_id" required>
+                  <select class="form-select" id="plateSelect" name="license_plate" required>
                     <option value="" disabled selected>Choose a plate</option>
                     {% for plate in license_plates %}
-                      <option value="{{ plate.id }}">{{ plate.state }} - {{ plate.plate_number }}</option>
+                      <option name="plate_id" value="{{ plate.id }}">{{ plate.state }} - {{ plate.plate_number }}</option>
                     {% endfor %}
                   </select>
                 </div>
                 <button type="submit" class="btn btn-success w-100">Start</button>
+                {% if new_job %}
+                  <div class="alert alert-success mt-2 p-2" role="alert">
+                    Job started for <strong>{{ new_job.driver.firstname }} {{ new_job.driver.lastname }}</strong> with plate <strong>{{ new_job.license_plate.state }} {{ new_job.license_plate.plate_number }}</strong>.
+                  </div>
+                {% endif %}
               </form>
+              {% if jobs %}
+                <div class="mt-3">
+                  {% for job in jobs %}
+                    <div class="alert alert-info p-2 mb-1" role="alert">
+                      <strong>{{ job.driver.firstname }} {{ job.driver.lastname }}</strong> - {{ job.license_plate.state }} {{ job.license_plate.plate_number }}
+                      <br><small>{{ job.timestamp }}</small>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
           </li>
         </ul>
