@@ -92,7 +92,7 @@ class PortSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        group = Group.objects.get(name="Port Operator")
+        group = Group.objects.get(name="Port")
         user.groups.add(group)
         return super().form_valid(form)
 

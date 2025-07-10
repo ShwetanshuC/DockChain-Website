@@ -23,5 +23,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('truckmanagement/', include('truckmanagement.urls')),
     path('driverinterface/', include('Driver.urls')),
+    path('portinterface/', include('Port.urls')),
     path('admin/', admin.site.urls),
 ]
