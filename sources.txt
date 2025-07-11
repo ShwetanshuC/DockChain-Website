@@ -79,16 +79,18 @@ CSS for truck interface
 NAVBAR needs to detect which user permission there is and show the appropriate search bar
 
 
-Truck Company Interface
+Manage Profile
 
-Move search to left and put three dots
+Displays information for the individual account
 
-Profile 
+Display Username (edit username option)
 
-Documentation
-
-Sign Out
+Display email (change email with email verification)
 
 
+Change Password:
+    Email Verification 
+    Custom Page for that
+    Custom change password page
 
-Login Page should also automatically redirect
+Delete Account Button

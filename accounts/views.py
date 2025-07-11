@@ -124,3 +124,6 @@ class CustomLoginView(LoginView):
             return "/admin/"
         return super().get_success_url()
     
+def ManageProfile(request):
+    return render(request, "manageprofile.html")
+    

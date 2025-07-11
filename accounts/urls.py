@@ -6,6 +6,7 @@ from .views import (
     TruckCompanySignUpView,
     PortSignUpView,
     CustomLoginView,
+    ManageProfile
 )
 
 urlpatterns = [
@@ -16,4 +17,5 @@ urlpatterns = [
     path("search_license_plates/", views.search_license_plates, name="search_license_plates"),
     path("unauthorized/", views.unauthorized_view, name="unauthorized"),
     path("login/", CustomLoginView.as_view(), name="login"),
+    path("manageprofile/", views.ManageProfile, name="manageprofile"),
 ]
