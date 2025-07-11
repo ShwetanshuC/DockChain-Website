@@ -1,5 +1,8 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from django.http import HttpResponseRedirect
+from truckmanagement.models import trucker, LicensePlate
+#from accounts.models import Job
+#from accounts.forms import JobForm
 
 def success(request): 
     return render(request, "success.html")
@@ -103,3 +106,21 @@ class PortSignUpView(CreateView):
         user.groups.add(group)
         login(self.request, user)
         return HttpResponseRedirect(self.get_success_url())
+    
+"""
+def base(request):
+    if request.method == "POST":
+        action = request.POST.get('action')
+        if action == 'start_job':
+            #form = JobForm(request.POST)
+            #if form.is_valid():
+            #    return redirect('success')
+            driver_id = request.POST.get('trucker_id')
+            plate_id = request.POST.get('plate_id')
+            driverObj = trucker.objects.get(id=driver_id)
+            licenseplateObj = LicensePlate.objects.get(id=plate_id)
+            form = JobForm(request.POST) #JobForm(driver=driverObj, license_plate=licenseplateObj)
+            if form.is_valid():
+                form.save()
+                return redirect('/success/')
+"""

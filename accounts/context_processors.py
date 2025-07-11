@@ -1,5 +1,7 @@
 from truckmanagement.models import LicensePlate 
 from truckmanagement.models import trucker
+#from truckmanagement.models import Job
+from django.shortcuts import render, HttpResponse
 
 def nav_items(request):
     nav_options = [

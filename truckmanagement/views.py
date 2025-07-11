@@ -64,6 +64,21 @@ def driverdirectory(request):
             role = request.POST.get('role')
             trucker.objects.create(firstname=firstname, lastname=lastname, role=role)
             return redirect('driverdirectory')
+        
+        elif action == 'start_job':
+            driver_id = request.POST.get('driver')
+            plate_id = request.POST.get('license_plate')
+            print("Driver ID:", driver_id)
+            print("Plate ID:", plate_id)
+
+            if driver_id and plate_id:
+                driver_obj = get_object_or_404(trucker, id=driver_id)
+                plate_obj = get_object_or_404(LicensePlate, id=plate_id)
+                print("Driver Object:", driver_obj)
+                print("Plate Object:", plate_obj)
+                Job.objects.create(driver=driver_obj, license_plate=plate_obj)
+            
+            return redirect('driverdirectory')
 
     else:
         form = TruckerForm()
@@ -102,6 +117,17 @@ def licenseplates(request):
             plate_id = request.POST.get('plate_id')
             plate = get_object_or_404(LicensePlate, id=plate_id)
             plate.delete()
+            return redirect('licenseplates')
+        
+        elif action == 'start_job':
+            driver_id = request.POST.get('trucker_id')
+            plate_id = request.POST.get('plate_id')
+
+            if driver_id and plate_id:
+                driver_obj = get_object_or_404(trucker, id=driver_id)
+                plate_obj = get_object_or_404(LicensePlate, id=plate_id)
+                Job.objects.create(driver=driver_obj, license_plate=plate_obj)
+            
             return redirect('licenseplates')
 
     form = LicensePlateForm()

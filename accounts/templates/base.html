@@ -28,8 +28,6 @@
             </li>
           {% endfor %}
           <li class="nav-item dropdown">
-            {% csrf_token %}
-            <input type="hidden" name="action" value="add">
             <button class="btn btn-primary dropdown-toggle ms-2" type="button" id="startJobDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               Start a Job
             </button>

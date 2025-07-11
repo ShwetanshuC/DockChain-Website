@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.utils import timezone
 from django.db import models
+from truckmanagement.models import trucker, LicensePlate
 
 class CustomUserManager(UserManager):
     def _create_user(self, email, password, **extra_fields):
@@ -10,7 +11,7 @@ class CustomUserManager(UserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save(self._db)
+        user.save(using=self._db)
 
         return user
     
@@ -52,4 +53,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def get_short_name(self):
         return self.name or self.email.split('@')[0]
-    
+"""    
+class Job(models.Model):
+    driver = models.ForeignKey(trucker, on_delete=models.CASCADE)
+    license_plate = models.ForeignKey(LicensePlate, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)  # store when the job was started
+
+    def __str__(self):
+        return f"{self.driver.firstname} {self.driver.lastname} - {self.license_plate.plate_number}"
+"""
