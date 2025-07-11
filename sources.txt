@@ -79,13 +79,16 @@ CSS for truck interface
 NAVBAR needs to detect which user permission there is and show the appropriate search bar
 
 
-Unauthorized page 
+Truck Company Interface
 
-If logged in to a different kind of account:
+Move search to left and put three dots
 
-Your account is not authorized to view this page
+Profile 
 
-Option to Log out, visit the correct interface, or log in to an account with the correct permissions
+Documentation
 
-Reloading the unauthorized page should check if the user is logged in
+Sign Out
 
+
+
+Login Page should also automatically redirect

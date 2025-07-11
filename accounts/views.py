@@ -103,3 +103,6 @@ class PortSignUpView(CreateView):
         user.groups.add(group)
         login(self.request, user)
         return HttpResponseRedirect(self.get_success_url())
+    
+def unauthorized_view(request):
+    return render(request, "unauthorized.html", {"next": request.GET.get("next", "/")})
