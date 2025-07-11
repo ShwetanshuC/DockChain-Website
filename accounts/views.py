@@ -1,9 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from django.http import HttpResponseRedirect
 
-def success(request): 
-    return render(request, "success.html")
-
 #sign up page
 from .forms import CustomUserCreationForm
 from django.urls import reverse_lazy
@@ -106,3 +103,24 @@ class PortSignUpView(CreateView):
     
 def unauthorized_view(request):
     return render(request, "unauthorized.html", {"next": request.GET.get("next", "/")})
+
+
+# Custom login view that redirects users to their respective interface after logging in
+from django.contrib.auth.views import LoginView
+
+class CustomLoginView(LoginView):
+    template_name = "registration/login.html"
+    success_url = "/"
+
+    def get_success_url(self):
+        user = self.request.user
+        if user.groups.filter(name="Driver").exists():
+            return "/driverinterface/"
+        elif user.groups.filter(name="Trucking Company").exists():
+            return "/truckmanagement/"
+        elif user.groups.filter(name="Port").exists():
+            return "/portinterface/"
+        elif user.is_superuser:
+            return "/admin/"
+        return super().get_success_url()
+    
