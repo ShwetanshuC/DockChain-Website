@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from accounts.forms import CustomUserCreationForm
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.shortcuts import render, redirect
 from .models import trucker, LicensePlate, Job
 from .forms import TruckerForm, LicensePlateForm, JobForm
@@ -27,7 +27,8 @@ def add_job(request):
 def is_trucking_company(user):
     return user.is_superuser or user.groups.filter(name='Trucking Company').exists()
 
-@user_passes_test(is_trucking_company, login_url='/unauthorized/')
+@login_required(login_url='/accounts/login/')
+@user_passes_test(is_trucking_company, login_url='/accounts/unauthorized/')
 def truckmanagement(request): 
     truckers = trucker.objects.all().order_by('-date_posted')
     
@@ -124,7 +125,3 @@ def start_job(request):
                 form.save()
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
-
-
-
-

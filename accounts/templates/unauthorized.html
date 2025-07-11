@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{%load static%}
+{% block interface_content %}
+
+<link rel="stylesheet" href="{% static 'Unauthorized/style.css' %}">
+
+<h2>Unauthorized Access</h2>
+<p>You do not have permission to access this page.</p>
+{% if next %}
+    <p>Requested URL: <code>{{ next }}</code></p>
+{% endif %}
+
+<a href="/">Go Home</a>
+
+<form action="{% url 'logout' %}" method="post" class="mb-4">
+  {% csrf_token %}
+  <button type="submit">Log Out</button>
+</form>
+
+{% if user.is_authenticated %}
+  {% if user.groups.all.0.name == "Driver" %}
+    <a href="/driverinterface/"><button>Go to Driver Dashboard</button></a>
+  {% elif user.groups.all.0.name == "Trucking Company" %}
+    <a href="/truckmanagement/"><button>Go to Truck Company Dashboard</button></a>
+  {% elif user.groups.all.0.name == "Port" %}
+    <a href="/portinterface/"><button>Go to Port Dashboard</button></a>
+  {% elif user.is_superuser %}
+    <a href="/admin/"><button>Go to Admin Panel</button></a>
+  {% endif %}
+{% endif %}
+
+{% endblock %}

@@ -9,8 +9,8 @@ def is_driver(user):
     print("Groups:", list(user.groups.values_list('name', flat=True)))
     return user.groups.filter(name__iexact='Driver').exists()
 
-@login_required(login_url='/login/')
-@user_passes_test(is_driver, login_url='/unauthorized/')
+@login_required(login_url='/accounts/login/')
+@user_passes_test(is_driver, login_url='/accounts/unauthorized/')
 def driver(request): 
     return render(request, "driverinterface.html")
 

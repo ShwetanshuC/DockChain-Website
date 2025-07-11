@@ -1,8 +1,9 @@
-{%extends "index.html" %} 
+{% extends conditionalhome %}
 {%load static%}
 {%block title%} DockChain {%endblock%}
 
-{%block page_content%} 
+{% block interface_content %}
+{% block page_content %}
 
 <link rel="stylesheet" href="{% static 'Home/style.css' %}">
 
@@ -11,6 +12,9 @@
         <h1>DockChain</h1>
         <h4>A novel solution for transportation inefficiencies in the cargo shipping industry.</h4>
     </div>
+
+
+{% if not user.is_authenticated %}
 
     <!--Login Cards-->
     <section class="card-container" id="register">
@@ -42,6 +46,9 @@
         </div>
     </section>
 
-    <script src="{% static 'Home/script.js' %}"></script>
-{%endblock%}
 
+{% else %}
+{% endif %}
+    <script src="{% static 'Home/script.js' %}"></script>
+{% endblock %}
+{% endblock %}

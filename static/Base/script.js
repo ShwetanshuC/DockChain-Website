@@ -15,4 +15,12 @@ document.addEventListener("DOMContentLoaded", function () {
       startJobMenu.toggle();
     });
   }
+  const moreOptionsDropdown = document.getElementById("moreOptionsDropdown");
+  if (moreOptionsDropdown && typeof bootstrap !== 'undefined') {
+    const moreOptionsMenu = new bootstrap.Dropdown(moreOptionsDropdown);
+    moreOptionsDropdown.addEventListener('click', function (event) {
+      event.preventDefault();
+      moreOptionsMenu.toggle();
+    });
+  }
 });
