@@ -24,6 +24,18 @@ def add_job(request):
         form = TruckerForm()
     return render(request, 'interface1.html', {'form': form})
 
+#elif action == 'start_job':
+    #createjob(request)
+    #return redirect('driverdirectory')
+def createjob(request):
+    driver_id = request.POST.get('driver')
+    plate_id = request.POST.get('license_plate')
+
+    if driver_id and plate_id:
+        driver_obj = get_object_or_404(trucker, id=driver_id)
+        plate_obj = get_object_or_404(LicensePlate, id=plate_id)
+        Job.objects.create(driver=driver_obj, license_plate=plate_obj)
+
 def is_trucking_company(user):
     return user.is_superuser or user.groups.filter(name='Trucking Company').exists()
 
@@ -66,18 +78,7 @@ def driverdirectory(request):
             return redirect('driverdirectory')
         
         elif action == 'start_job':
-            driver_id = request.POST.get('driver')
-            plate_id = request.POST.get('license_plate')
-            print("Driver ID:", driver_id)
-            print("Plate ID:", plate_id)
-
-            if driver_id and plate_id:
-                driver_obj = get_object_or_404(trucker, id=driver_id)
-                plate_obj = get_object_or_404(LicensePlate, id=plate_id)
-                print("Driver Object:", driver_obj)
-                print("Plate Object:", plate_obj)
-                Job.objects.create(driver=driver_obj, license_plate=plate_obj)
-            
+            createjob(request)
             return redirect('driverdirectory')
 
     else:
@@ -120,14 +121,7 @@ def licenseplates(request):
             return redirect('licenseplates')
         
         elif action == 'start_job':
-            driver_id = request.POST.get('trucker_id')
-            plate_id = request.POST.get('plate_id')
-
-            if driver_id and plate_id:
-                driver_obj = get_object_or_404(trucker, id=driver_id)
-                plate_obj = get_object_or_404(LicensePlate, id=plate_id)
-                Job.objects.create(driver=driver_obj, license_plate=plate_obj)
-            
+            createjob(request)
             return redirect('licenseplates')
 
     form = LicensePlateForm()
