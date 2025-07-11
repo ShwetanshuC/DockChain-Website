@@ -40,19 +40,38 @@ General Interface:
 
 Start Job:
 
-1. Select port location
+1. Select port location (database entry)
 
-2. Pickup or dropoff
+2. Pickup or dropoff (databse entry)
 
-3. Select assigned Trucker
+3. Select assigned Trucker 
 
 4. Select assigned vehicle
 
-5. ID of cargo being handled
+5. ID of cargo being handled in addition description of what cargo is (2 seaparate entries)
 
 6. Description of job (request to port)
 
-7. Sends request to port and port has to approve before entry is granted
+7. Sends request to port and port has to approve before entry is granted (awaiting response, approved, denied)
+
+(8. Initalized time)
+(9. Approved time)
+(10. Target dropoff time)
+Port 
+
+1. Approve deny or awaiting
+
+2. After approval, sent back to truck company (in Approved Jobs table)
+
+Confirmation of some sort (verified database)
+
+after verification goes to the Trucker
+
+DRIVER
+
+SCheduled Job 
+
+When the time for job comes, it gets moved to an active job
 
 Active/Scheduled Job:
 
