@@ -14,7 +14,7 @@ def trucker_list(request):
     truckers = trucker.objects.all().order_by('-date_posted')
     return render(request, 'trucker_list.html', {'truckers': truckers})
 
-def add_job(request):
+"""def add_job(request):
     if request.method == 'POST':
         form = TruckerForm(request.POST)
         if form.is_valid():
@@ -22,7 +22,20 @@ def add_job(request):
             return redirect('trucker_list')
     else:
         form = TruckerForm()
-    return render(request, 'interface1.html', {'form': form})
+    return render(request, 'interface1.html', {'form': form})"""
+
+
+#elif action == 'start_job':
+    #createjob(request)
+    #return redirect('driverdirectory')
+def createjob(request):
+    driver_id = request.POST.get('driver')
+    plate_id = request.POST.get('license_plate')
+
+    if driver_id and plate_id:
+        driver_obj = get_object_or_404(trucker, id=driver_id)
+        plate_obj = get_object_or_404(LicensePlate, id=plate_id)
+        Job.objects.create(driver=driver_obj, license_plate=plate_obj)
 
 def is_trucking_company(user):
     return user.is_superuser or user.groups.filter(name='Trucking Company').exists()
@@ -31,16 +44,21 @@ def is_trucking_company(user):
 @user_passes_test(is_trucking_company, login_url='/accounts/unauthorized/')
 def truckmanagement(request): 
     truckers = trucker.objects.all().order_by('-date_posted')
+    jobs = Job.objects.all().order_by('timestamp')
     
     if request.method == 'POST':
-        form = TruckerForm(request.POST)
-        if form.is_valid():
-            form.save()
+        if request.POST.get('action') == 'start_job':
+            createjob(request)
             return redirect('truckmanagement')
+        else:
+            form = TruckerForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('truckmanagement')
     else:
         form = TruckerForm()
 
-    return render(request, "interface1.html", {'truckers': truckers, 'form': form})
+    return render(request, "interface1.html", {'truckers': truckers, 'jobs': jobs, 'form': form})
 
 def driverdirectory(request): 
     truckers = trucker.objects.all().order_by('-date_posted')
@@ -65,6 +83,10 @@ def driverdirectory(request):
             role = request.POST.get('role')
             trucker.objects.create(firstname=firstname, lastname=lastname, role=role)
             return redirect('driverdirectory')
+        
+        elif action == 'start_job':
+            createjob(request)
+            return redirect('driverdirectory')
 
     else:
         form = TruckerForm()
@@ -77,6 +99,11 @@ def delete_trucker(request, id):
         trucker_to_delete.delete()
     return redirect('driverdirectory')
 
+def delete_job(request, id):
+    if request.method == 'POST':
+        job_to_delete = get_object_or_404(Job, id=id)
+        job_to_delete.delete()
+    return redirect('truckmanagement')
 
 # View for license plates
 def licenseplates(request):
@@ -103,6 +130,10 @@ def licenseplates(request):
             plate_id = request.POST.get('plate_id')
             plate = get_object_or_404(LicensePlate, id=plate_id)
             plate.delete()
+            return redirect('licenseplates')
+        
+        elif action == 'start_job':
+            createjob(request)
             return redirect('licenseplates')
 
     form = LicensePlateForm()

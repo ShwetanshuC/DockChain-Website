@@ -18,3 +18,46 @@ h1 {
 .job-box {
     height: 700px;
 }
+
+#job-cards {
+    overflow-y: scroll;
+    max-height: 600px;
+}
+
+/*Pending, Approved, Denied, InProgress, SecurityCleared, CargoPickedUp, Completed
+# quick test for job status colors */
+
+.pending {
+    background-color: #ffe5c1ff;
+    background-opacity: 0.8;
+}
+
+.approved {
+    background-color: #5bc0de;
+    background-opacity: 0.8;
+}
+
+.denied {
+    background-color: #d9534f;
+    background-opacity: 0.8;
+}
+
+.inprogress {
+    background-color: #d900ffff;
+    background-opacity: 0.8;
+}
+
+.securitycleared {
+    background-color: #ea72ffff;
+    background-opacity: 0.8;
+}
+
+.cargopickedup {
+    background-color: #f3aeffff;
+    background-opacity: 0.8;
+}
+
+.completed {
+    background-color: #00ff2aff;
+    background-opacity: 0.8;
+}

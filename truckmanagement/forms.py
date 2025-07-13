@@ -17,4 +17,4 @@ class LicensePlateForm(forms.ModelForm):
 class JobForm(forms.ModelForm):
     class Meta:
         model = Job
-        fields = ['driver', 'license_plate']
+        fields = ['driver', 'license_plate', 'port_location', 'job_type', 'cargo_id', 'description']

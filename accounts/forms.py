@@ -9,3 +9,8 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("email",)  # Add more if needed (e.g., "name")
+
+#class PortUserCreationForm(UserCreationForm):
+#    class Meta:
+#        model = User
+#        fields = ("email", "port_location",)  # Add more if needed (e.g., "name")

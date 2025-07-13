@@ -20,7 +20,14 @@ class LicensePlate(models.Model):
 class Job(models.Model):
     driver = models.ForeignKey(trucker, on_delete=models.CASCADE)
     license_plate = models.ForeignKey(LicensePlate, on_delete=models.CASCADE)
+    port_location = models.CharField(max_length=50, default='Unknown')
+    job_type = models.IntegerField(choices=[(0, 'Hybrid'), (1, 'Pickup'), (2, 'Delivery')], default=1)  # 1 for pickup, 2 for delivery
+    cargo_id = models.CharField(max_length=50, default='Unknown')
+    description = models.TextField(blank=True, default='Unknown')
+    status = models.CharField(max_length=10, default='Pending')  # e.g., Pending, Approved, Denied, InProgress, SecurityCleared, CargoPickedUp, Completed
     timestamp = models.DateTimeField(auto_now_add=True)  # store when the job was started
+    approval_timestamp = models.DateTimeField(null=True)  # store when the job was approved
+    target_timestamp = models.DateTimeField(null=True)  # store when the job is expected to be completed
 
     def __str__(self):
-        return f"{self.driver.firstname} {self.driver.lastname} - {self.license_plate.plate_number}"
+        return f"{self.driver.firstname} {self.driver.lastname} - {self.license_plate.plate_number}. {self.status}"

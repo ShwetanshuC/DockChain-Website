@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 
 #sign up page
 from .forms import CustomUserCreationForm
+#from .forms import PortUserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
@@ -90,7 +91,7 @@ class TruckCompanySignUpView(CreateView):
 
 # Port Operator Sign Up View
 class PortSignUpView(CreateView):
-    form_class = CustomUserCreationForm
+    form_class = CustomUserCreationForm # PortUserCreationForm
     template_name = "registration/port_signup.html"
     def get_success_url(self):
         return "/portinterface/"

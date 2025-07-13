@@ -46,13 +46,22 @@
                     {% endfor %}
                   </select>
                 </div>
-  
+                <!--'driver', 'license_plate', 'port_location', 'job_type', 'cargo_id', 'description'-->
                 <div class="mb-3">
                   <label for="plateSelect" class="form-label">Select License Plate</label>
                   <select class="form-select" id="plateSelect" name="license_plate" required>
                     <option value="" disabled selected>Choose a plate</option>
                     {% for plate in license_plates %}
                       <option name="plate_id" value="{{ plate.id }}">{{ plate.state }} - {{ plate.plate_number }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="locationSelect" class="form-label">Select Location</label>
+                  <select class="form-select" id="locationSelect" name="port_location" required>
+                    <option value="" disabled selected>Choose a location</option>
+                    {% for location in locations %}
+                      <option name="location_id" value="{{ location.id }}">{{ location.name }}</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -63,7 +72,7 @@
                   </div>
                 {% endif %}
               </form>
-              {% if jobs %}
+              <!--{% if jobs %}
                 <div class="mt-3">
                   {% for job in jobs %}
                     <div class="alert alert-info p-2 mb-1" role="alert">
@@ -72,7 +81,7 @@
                     </div>
                   {% endfor %}
                 </div>
-              {% endif %}
+              {% endif %}-->
             </div>
           </li>
         </ul>

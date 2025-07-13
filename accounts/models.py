@@ -29,6 +29,7 @@ class CustomUserManager(UserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(blank = True, default = '', unique = True)
     name = models.CharField(max_length = 255, blank=True, default = '')
+    #port_location = models.CharField(max_length=255, help_text="Enter the port location", blank=True, default='None')
 
     is_active = models.BooleanField(default = True)
     is_superuser = models.BooleanField(default = False)
