@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 from .views import (
-    SignUpView,
     TruckDriverSignUpView,
     TruckCompanySignUpView,
     PortSignUpView,
@@ -18,4 +17,9 @@ urlpatterns = [
     path("unauthorized/", views.unauthorized_view, name="unauthorized"),
     path("login/", CustomLoginView.as_view(), name="login"),
     path("manageprofile/", views.ManageProfile, name="manageprofile"),
+    #Below this is all the documentation stuff----------------------------
+    path("driverDocumentation/", views.DriverDocumentation, name="DriverDocumentation"),
+    path("portDocumentation/", views.PortDocumentation, name="PortDocumentation"),
+    path("truckCompanyDocumentation/", views.TruckCompanyDocumentation, name="TruckCompanyDocumentation"),
+
 ]
