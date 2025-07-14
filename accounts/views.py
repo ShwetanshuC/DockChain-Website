@@ -28,11 +28,6 @@ class TruckDriverSignUpView(CreateView):
         login(self.request, user)
         return HttpResponseRedirect(self.get_success_url())
 
-class TruckCompanySignUpView(CreateView):
-    form_class = CustomUserCreationForm
-    success_url = reverse_lazy("login")
-    template_name = "registration/truck_company_signup.html"
-
 from django.db.models import Q
 from django.contrib.auth.models import Group
 from django.contrib.auth import login
@@ -124,6 +119,39 @@ class CustomLoginView(LoginView):
             return "/admin/"
         return super().get_success_url()
     
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.contrib import messages
+
+@login_required
 def ManageProfile(request):
+    user = request.user
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        if action == "update_username":
+            new_username = request.POST.get("username")
+            if new_username:
+                user.username = new_username
+                user.save()
+                messages.success(request, "Username updated successfully.")
+
+        elif action == "update_email":
+            new_email = request.POST.get("email")
+            if new_email:
+                user.email = new_email
+                user.save()
+                messages.success(request, "Email updated successfully.")
+
+        elif action == "change_password":
+            # Placeholder for password change process
+            messages.info(request, "Password change functionality coming soon.")
+
+        elif action == "delete_account":
+            logout(request)         # Log the user out first
+            user.delete()           # Delete the user account
+            return redirect("home") # Redirect to homepage
+
     return render(request, "manageprofile.html")
-    
