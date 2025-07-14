@@ -33,6 +33,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length = 255, default = '')
     port_location = models.CharField(max_length=255, default='None')
     organization = models.CharField(max_length=255, default='None')
+    qualifications = models.CharField(max_length=255, default='')
+    services = models.CharField(max_length=255, default='None')
+    isCargoBroker = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default = True)
     is_superuser = models.BooleanField(default = False)

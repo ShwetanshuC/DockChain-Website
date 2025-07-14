@@ -76,6 +76,7 @@ def truckmanagement(request):
 
 def driverdirectory(request): 
     truckers = trucker.objects.all().order_by('-date_posted')
+    locations = User.objects.filter(groups__name='Port').values_list('port_location', flat=True).distinct()
     
     if request.method == 'POST':
         print("POST ACTION:", request.POST.get('action'))
@@ -96,10 +97,11 @@ def driverdirectory(request):
             lastname = request.POST.get('lastname')
             role = request.POST.get('role')
             organization = request.user.organization if request.user.is_authenticated else "None"
+            qualifications="none"
             cocacenatedorg = (organization.lower()).replace(" ", "")
             newpassword = generate_random_password()
             print("Generated password:", newpassword)
-            trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization)
+            trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization, qualifications=qualifications)
             truckuser = User.objects.create_user(
                 f"{firstname.lower()}.{lastname.lower()}@{cocacenatedorg}.com",
                 newpassword,
@@ -108,6 +110,7 @@ def driverdirectory(request):
             truckuser.first_name = firstname
             truckuser.last_name = lastname
             truckuser.organization = organization
+            truckuser.qualifications = qualifications
             truckuser.save()
 
             group = Group.objects.get(name="Driver")
@@ -121,7 +124,7 @@ def driverdirectory(request):
     else:
         form = TruckerForm()
 
-    return render(request, "driverdirectory.html", {'truckers': truckers, 'form': TruckerForm()})
+    return render(request, "driverdirectory.html", {'truckers': truckers, 'locations': locations, 'form': TruckerForm()})
 
 def new_trucker(request, user_id, new_password):
     truck_user = get_object_or_404(User, id=user_id)
@@ -142,6 +145,7 @@ def delete_job(request, id):
 # View for license plates
 def licenseplates(request):
     license_plates = LicensePlate.objects.all().order_by('-date_added')
+    locations = User.objects.filter(groups__name='Port').values_list('port_location', flat=True).distinct()
 
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -171,7 +175,7 @@ def licenseplates(request):
             return redirect('licenseplates')
 
     form = LicensePlateForm()
-    return render(request, "licenseplates.html", {'license_plates': license_plates, 'form': form})
+    return render(request, "licenseplates.html", {'locations': locations, 'license_plates': license_plates, 'form': form})
 
 
 #start job

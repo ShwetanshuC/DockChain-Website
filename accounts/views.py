@@ -4,16 +4,17 @@ from django.http import HttpResponseRedirect
 #sign up page
 from .forms import CustomUserCreationForm
 from .forms import PortUserCreationForm
+from .forms import CompanyUserCreationForm
 from truckmanagement.models import trucker
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-
+'''
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/truck_company_signup.html"
-
+'''
 
 # Distinct sign up views for each user role
 class TruckDriverSignUpView(CreateView):
@@ -26,10 +27,11 @@ class TruckDriverSignUpView(CreateView):
     def form_valid(self, form):
         firstname = form.cleaned_data.get('first_name')
         lastname = form.cleaned_data.get('last_name')
+        qualifications = form.cleaned_data.get('qualifications')
         role = "Independent Driver"
         organization = "Independent"
-        trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization)
-            
+        trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization, qualifications=qualifications)
+
         user = form.save()
         user.organization = organization
         user.save()
@@ -79,7 +81,7 @@ def search_license_plates(request):
 
 # Trucking Company Sign Up View
 class TruckCompanySignUpView(CreateView):
-    form_class = CustomUserCreationForm
+    form_class = CompanyUserCreationForm
     template_name = "registration/truck_company_signup.html"
     # Remove success_url attribute since form_valid uses get_success_url
     def get_success_url(self):
