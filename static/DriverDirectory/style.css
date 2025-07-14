@@ -6,3 +6,10 @@ form {
 .page-top-buffer {
   margin-top: 80px;  /* Adjust as needed to push cards down */
 }
+
+div.user-info {
+    text-align: center;
+    margin-top: 20px;
+    color: black;
+}
+
