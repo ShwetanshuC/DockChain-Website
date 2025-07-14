@@ -127,4 +127,12 @@ class CustomLoginView(LoginView):
     
 def ManageProfile(request):
     return render(request, "manageprofile.html")
-    
+
+def DriverDocumentation(request):
+    return render(request, "driverDocumentation.html")
+
+def PortDocumentation(request):
+    return render(request, "portDocumentation.html")
+
+def TruckCompanyDocumentation(request):
+    return render(request, "truckCompanyDocumentation.html")
