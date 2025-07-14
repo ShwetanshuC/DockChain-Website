@@ -1,0 +1,29 @@
+{% extends "base.html" %} 
+{% load static %}
+{% block title %}New Truck User{% endblock %} 
+
+{%block interface_content%}
+
+<link rel="stylesheet" href="{% static 'DriverDirectory/style.css' %}">
+<!-- displays all information about new trucker and login-->
+
+
+<div class="page-top-buffer container">
+    <div class="user-info">
+        <h2 class="user-info">Your new trucker {{ truck_user.first_name }} {{ truck_user.last_name }} was successfully created!</h2>
+        <h3 class="user-info">Please provide them with the following login information:</h3>
+        <p class="card-text mb-1">Username/email: {{ truck_user.email }}</p>
+        <p class="card-text mb-1">Password: {{ new_password }}</p>
+        <br>
+        <p>Note: Neither you nor the newly enrolled trucker will see this information again, so please save it somewhere safe!</p>
+        <form action="{% url 'driverdirectory' %}" method="get">
+            <button type="submit">Return to Driver Directory</button>
+        </form>
+    </div>
+</div> <!-- Close page-top-buffer -->
+
+
+
+<script src="{%static 'DriverDirectory/script.js' %}"></script>
+
+{%endblock%}

@@ -4,5 +4,64 @@ form {
 
 /* Add spacing below the navbar and above the card section */
 .page-top-buffer {
-  margin-top: 80px;  /* Adjust as needed to push cards down */
+  margin-top: 40px;  /* Reduced spacing to lift cards closer */
+}
+
+div.user-info {
+    text-align: center;
+    margin-top: 20px;
+    color: black;
+}
+
+body {
+    background-color: #f8f9fa; /* Light gray background for contrast */
+    color: #212529; /* Dark text for readability */
+}
+
+.directory-title {
+    font-size: 3.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+
+    text-align: center;
+}
+
+.container.text-center p.lead {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: #495057;
+}
+
+.container.text-center .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    margin-top: 30px; /* Added to create even spacing */
+}
+
+/* Banner section with background image */
+.banner-container {
+    position: relative;
+    padding: 8rem 1rem;
+    color: white;
+    overflow: hidden;
+}
+
+.banner-container::before {
+    content: "";
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    bottom: -10%;
+    left: -10%;
+    background-image: url("../Home/Images/background.png");
+    background-size: cover;
+    background-position: center;
+    filter: blur(12px);
+    z-index: 0;
+}
+
+.banner-container > * {
+    position: relative;
+    z-index: 1;
 }

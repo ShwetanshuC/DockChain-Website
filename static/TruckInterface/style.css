@@ -19,6 +19,11 @@ h1 {
     height: 700px;
 }
 
+.trulist {
+    max-height: 380px;
+    overflow-y: scroll;
+}
+
 #job-cards {
     overflow-y: scroll;
     max-height: 600px;
@@ -61,3 +66,8 @@ h1 {
     background-color: #00ff2aff;
     background-opacity: 0.8;
 }
+
+/*.readable {
+    color: black !important;
+}*/
+

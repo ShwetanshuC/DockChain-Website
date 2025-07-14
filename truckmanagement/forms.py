@@ -6,7 +6,7 @@ from .models import Job
 class TruckerForm(forms.ModelForm):
     class Meta:
         model = trucker
-        fields = ['firstname', 'lastname', 'role']
+        fields = ['firstname', 'lastname', 'role', 'organization']
 
 
 class LicensePlateForm(forms.ModelForm):

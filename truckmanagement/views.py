@@ -2,13 +2,15 @@ from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from accounts.forms import CustomUserCreationForm
+from accounts.models import User
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.shortcuts import render, redirect
 from .models import trucker, LicensePlate, Job
 from .forms import TruckerForm, LicensePlateForm, JobForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login
+
+import secrets
 
 def trucker_list(request):
     truckers = trucker.objects.all().order_by('-date_posted')
@@ -31,21 +33,33 @@ def trucker_list(request):
 def createjob(request):
     driver_id = request.POST.get('driver')
     plate_id = request.POST.get('license_plate')
+    port_location = request.POST.get('port_location')
+    job_type = request.POST.get('job_type')
+    cargo_id = request.POST.get('cargo_id')
+    description = request.POST.get('description', 'No description provided')
 
     if driver_id and plate_id:
         driver_obj = get_object_or_404(trucker, id=driver_id)
         plate_obj = get_object_or_404(LicensePlate, id=plate_id)
-        Job.objects.create(driver=driver_obj, license_plate=plate_obj)
+        Job.objects.create(driver=driver_obj, license_plate=plate_obj, port_location=port_location, job_type=job_type, cargo_id=cargo_id, description=description)
 
 def is_trucking_company(user):
     return user.is_superuser or user.groups.filter(name='Trucking Company').exists()
+
+def generate_random_password():
+    return secrets.token_urlsafe(16)  # Generates a secure random password
 
 @login_required(login_url='/accounts/login/')
 @user_passes_test(is_trucking_company, login_url='/accounts/unauthorized/')
 def truckmanagement(request): 
     truckers = trucker.objects.all().order_by('-date_posted')
     jobs = Job.objects.all().order_by('timestamp')
-    
+    active_jobs = jobs.filter(status__in=['InProgress', 'SecurityCleared', 'CargoPickedUp'])
+    scheduled_jobs = jobs.filter(status__in=['Pending', 'Approved', 'Denied'])
+    completed_jobs = jobs.filter(status='Completed')
+    locations = User.objects.filter(groups__name='Port').values_list('port_location', flat=True).distinct()
+    if jobs:
+        print("Testing job_type:", jobs[0].job_type)
     if request.method == 'POST':
         if request.POST.get('action') == 'start_job':
             createjob(request)
@@ -58,10 +72,11 @@ def truckmanagement(request):
     else:
         form = TruckerForm()
 
-    return render(request, "interface1.html", {'truckers': truckers, 'jobs': jobs, 'form': form})
+    return render(request, "interface1.html", {'truckers': truckers, 'jobs': jobs, 'active_jobs': active_jobs, 'scheduled_jobs': scheduled_jobs, 'completed_jobs': completed_jobs, 'locations': locations, 'form': form})
 
 def driverdirectory(request): 
     truckers = trucker.objects.all().order_by('-date_posted')
+    locations = User.objects.filter(groups__name='Port').values_list('port_location', flat=True).distinct()
     
     if request.method == 'POST':
         print("POST ACTION:", request.POST.get('action'))
@@ -81,9 +96,27 @@ def driverdirectory(request):
             firstname = request.POST.get('firstname')
             lastname = request.POST.get('lastname')
             role = request.POST.get('role')
-            trucker.objects.create(firstname=firstname, lastname=lastname, role=role)
-            return redirect('driverdirectory')
-        
+            organization = request.user.organization if request.user.is_authenticated else "None"
+            qualifications="none"
+            cocacenatedorg = (organization.lower()).replace(" ", "")
+            newpassword = generate_random_password()
+            print("Generated password:", newpassword)
+            trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization, qualifications=qualifications)
+            truckuser = User.objects.create_user(
+                f"{firstname.lower()}.{lastname.lower()}@{cocacenatedorg}.com",
+                newpassword,
+            )
+
+            truckuser.first_name = firstname
+            truckuser.last_name = lastname
+            truckuser.organization = organization
+            truckuser.qualifications = qualifications
+            truckuser.save()
+
+            group = Group.objects.get(name="Driver")
+            truckuser.groups.add(group)
+            return redirect('new_trucker', user_id=truckuser.id, new_password=newpassword)
+
         elif action == 'start_job':
             createjob(request)
             return redirect('driverdirectory')
@@ -91,7 +124,11 @@ def driverdirectory(request):
     else:
         form = TruckerForm()
 
-    return render(request, "driverdirectory.html", {'truckers': truckers, 'form': TruckerForm()})
+    return render(request, "driverdirectory.html", {'truckers': truckers, 'locations': locations, 'form': TruckerForm()})
+
+def new_trucker(request, user_id, new_password):
+    truck_user = get_object_or_404(User, id=user_id)
+    return render(request, "new_trucker.html", {'truck_user': truck_user, 'new_password': new_password})
 
 def delete_trucker(request, id):
     if request.method == 'POST':
@@ -108,6 +145,7 @@ def delete_job(request, id):
 # View for license plates
 def licenseplates(request):
     license_plates = LicensePlate.objects.all().order_by('-date_added')
+    locations = User.objects.filter(groups__name='Port').values_list('port_location', flat=True).distinct()
 
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -137,7 +175,7 @@ def licenseplates(request):
             return redirect('licenseplates')
 
     form = LicensePlateForm()
-    return render(request, "licenseplates.html", {'license_plates': license_plates, 'form': form})
+    return render(request, "licenseplates.html", {'locations': locations, 'license_plates': license_plates, 'form': form})
 
 
 #start job
@@ -156,3 +194,31 @@ def start_job(request):
                 form.save()
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_required(login_url='/accounts/login/')
+@user_passes_test(is_trucking_company, login_url='/accounts/unauthorized/')
+def add_trucker(request):
+    if request.method == 'POST':
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
+        role = request.POST.get('role')
+        organization = request.user.organization if request.user.is_authenticated else "None"
+        cocacenatedorg = (organization.lower()).replace(" ", "")
+        newpassword = generate_random_password()
+        print("Generated password:", newpassword)
+
+        trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization)
+        truckuser = User.objects.create_user(
+            f"{firstname.lower()}.{lastname.lower()}@{cocacenatedorg}.com",
+            newpassword,
+        )
+        truckuser.first_name = firstname
+        truckuser.last_name = lastname
+        truckuser.organization = organization
+        truckuser.save()
+
+        group = Group.objects.get(name="Driver")
+        truckuser.groups.add(group)
+        return redirect('new_trucker', user_id=truckuser.id, new_password=newpassword)
+
+    return render(request, 'companytruckerform.html')

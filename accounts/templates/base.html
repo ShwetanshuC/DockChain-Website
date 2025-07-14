@@ -6,6 +6,10 @@
 
 <link rel="stylesheet" href="{% static 'Base/style.css' %}">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+
+
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
@@ -27,6 +31,7 @@
               <a class="nav-link" href="{{ item.url }}">{{ item.label }}</a>
             </li>
           {% endfor %}
+          {% if display_job_start %}
           <li class="nav-item dropdown">
             {% csrf_token %}
             <input type="hidden" name="action" value="add">
@@ -41,7 +46,7 @@
                   <label for="driverSelect" class="form-label">Select Driver</label>
                   <select class="form-select" id="driverSelect" name="driver" required>
                     <option value="" disabled selected>Choose a driver</option>
-                    {% for trucker in truckers %}
+                    {% for trucker in filtered_truckers %}
                       <option name="trucker_id" value="{{ trucker.id }}">{{ trucker.firstname }} {{ trucker.lastname }}</option>
                     {% endfor %}
                   </select>
@@ -61,9 +66,26 @@
                   <select class="form-select" id="locationSelect" name="port_location" required>
                     <option value="" disabled selected>Choose a location</option>
                     {% for location in locations %}
-                      <option name="location_id" value="{{ location.id }}">{{ location.name }}</option>
+                      <option name="location" value="{{ location }}">{{ location }}</option>
                     {% endfor %}
                   </select>
+                </div>
+                <div class="mb-3">
+                  <label for="jobTypeSelect" class="form-label">Job Type</label>
+                  <select class="form-select" id="jobTypeSelect" name="job_type" required>
+                    <option value="" disabled selected>Choose a job type</option>
+                    <option name="hybrid" value="HYBRID">Hybrid (Deliery & Pickup)</option>
+                    <option name="pickup" value="PICKUP">Pickup</option>
+                    <option name="delivery" value="DELIVERY">Delivery</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="cargoSelect" class="form-label">Cargo ID Number</label>
+                  <input type="text" class="form-control" id="cargoInput" name="cargo_id" required placeholder="Enter cargo ID">
+                </div>
+                <div class="mb-3">
+                  <label for="description" class="form-label">Description</label>
+                  <textarea class="form-control" id="descriptionInput" name="description" rows="3" placeholder="Enter job description (optional)"></textarea>
                 </div>
                 <button type="submit" class="btn btn-success w-100">Start</button>
                 {% if new_job %}
@@ -84,6 +106,7 @@
               {% endif %}-->
             </div>
           </li>
+          {% endif %}
         </ul>
         <form class="d-flex me-2" role="search" method="get" 
               action="{% if 'fleet' in center_item.label|lower %}

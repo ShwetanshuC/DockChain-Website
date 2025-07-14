@@ -3,16 +3,18 @@ from django.http import HttpResponseRedirect
 
 #sign up page
 from .forms import CustomUserCreationForm
-#from .forms import PortUserCreationForm
+from .forms import PortUserCreationForm
+from .forms import CompanyUserCreationForm
+from truckmanagement.models import trucker
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-
+'''
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/truck_company_signup.html"
-
+'''
 
 # Distinct sign up views for each user role
 class TruckDriverSignUpView(CreateView):
@@ -23,16 +25,20 @@ class TruckDriverSignUpView(CreateView):
         return "/driverinterface/"
 
     def form_valid(self, form):
+        firstname = form.cleaned_data.get('first_name')
+        lastname = form.cleaned_data.get('last_name')
+        qualifications = form.cleaned_data.get('qualifications')
+        role = "Independent Driver"
+        organization = "Independent"
+        trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization, qualifications=qualifications)
+
         user = form.save()
+        user.organization = organization
+        user.save()
         group = Group.objects.get(name="Driver")
         user.groups.add(group)
         login(self.request, user)
         return HttpResponseRedirect(self.get_success_url())
-
-class TruckCompanySignUpView(CreateView):
-    form_class = CustomUserCreationForm
-    success_url = reverse_lazy("login")
-    template_name = "registration/truck_company_signup.html"
 
 from django.db.models import Q
 from django.contrib.auth.models import Group
@@ -75,7 +81,7 @@ def search_license_plates(request):
 
 # Trucking Company Sign Up View
 class TruckCompanySignUpView(CreateView):
-    form_class = CustomUserCreationForm
+    form_class = CompanyUserCreationForm
     template_name = "registration/truck_company_signup.html"
     # Remove success_url attribute since form_valid uses get_success_url
     def get_success_url(self):
@@ -91,7 +97,7 @@ class TruckCompanySignUpView(CreateView):
 
 # Port Operator Sign Up View
 class PortSignUpView(CreateView):
-    form_class = CustomUserCreationForm # PortUserCreationForm
+    form_class = PortUserCreationForm
     template_name = "registration/port_signup.html"
     def get_success_url(self):
         return "/portinterface/"
@@ -125,6 +131,12 @@ class CustomLoginView(LoginView):
             return "/admin/"
         return super().get_success_url()
     
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.contrib import messages
+
+@login_required
 def ManageProfile(request):
     return render(request, "manageprofile.html")
 
@@ -136,3 +148,32 @@ def PortDocumentation(request):
 
 def TruckCompanyDocumentation(request):
     return render(request, "truckCompanyDocumentation.html")
+    user = request.user
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        if action == "update_username":
+            new_username = request.POST.get("username")
+            if new_username:
+                user.username = new_username
+                user.save()
+                messages.success(request, "Username updated successfully.")
+
+        elif action == "update_email":
+            new_email = request.POST.get("email")
+            if new_email:
+                user.email = new_email
+                user.save()
+                messages.success(request, "Email updated successfully.")
+
+        elif action == "change_password":
+            # Placeholder for password change process
+            messages.info(request, "Password change functionality coming soon.")
+
+        elif action == "delete_account":
+            logout(request)         # Log the user out first
+            user.delete()           # Delete the user account
+            return redirect("home") # Redirect to homepage
+
+    return render(request, "manageprofile.html")
