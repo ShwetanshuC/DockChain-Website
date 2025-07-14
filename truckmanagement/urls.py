@@ -8,4 +8,5 @@ urlpatterns = [
     path('deletej/<int:id>/', views.delete_job, name='delete_job'),
     path("licenseplates/", views.licenseplates, name="licenseplates"),
     path("new_trucker/<int:user_id>/<str:new_password>/", views.new_trucker, name="new_trucker"),
+    path("companytruckerform/", views.add_trucker, name="companytruckerform"),
 ]

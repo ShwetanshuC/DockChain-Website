@@ -6,21 +6,46 @@
 
 <link rel="stylesheet" href="{% static 'DriverDirectory/style.css' %}">
 
+<div class="banner-container text-center">
+  <div class="container">
+    <h2 class="directory-title">License Plate Tracker</h2>
+    <p class="fs-4 mt-3 mb-0 text-white">This directory lists all license plates registered under your organization.</p>
+    <p class="fs-5 mt-0 mb-4 text-white">You can edit or delete existing plate records, and add new ones as needed.</p>
+  </div>
+</div>
+
 <!-- Form to add a new license plate -->
-<form method="POST">
-  {% csrf_token %}
-  <input type="hidden" name="action" value="add_plate">
-  <div class="mb-3">
-    <input type="text" name="state" class="form-control" placeholder="State (e.g., NC)" required>
+<div class="container mt-5" id="add-plate-form">
+  <form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="add_plate">
+    <div class="mb-3">
+      <input type="text" name="state" class="form-control" placeholder="State (e.g., NC)" required>
+    </div>
+    <div class="mb-3">
+      <input type="text" name="plate_number" class="form-control" placeholder="Plate Number (e.g., ABC1234)" required>
+    </div>
+    <button type="submit" class="btn btn-success">Add License Plate</button>
+  </form>
+</div>
+
+<div class="container text-center mt-4">
+  <div class="row">
+    <div class="col">
+      <h6>Total Plates</h6>
+      <p>{{ license_plates|length }}</p>
+    </div>
+    <div class="col">
+      <h6>Last Added</h6>
+      <p>{% if license_plates %}{{ license_plates.0.date_added|date:"M d, Y" }}{% else %}-{% endif %}</p>
+    </div>
   </div>
-  <div class="mb-3">
-    <input type="text" name="plate_number" class="form-control" placeholder="Plate Number (e.g., ABC1234)" required>
-  </div>
-  <button type="submit" class="btn btn-primary">Add License Plate</button>
-</form>
+</div>
+
+
 
 <!-- License plates display -->
-<div class="page-top-buffer container">
+<div class="page-top-buffer container mt-4">
   <div class="row g-2 justify-content-center">
     {% for plate in license_plates %}
       <div class="col-12 col-md-10 col-lg-8">
