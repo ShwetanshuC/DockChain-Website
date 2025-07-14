@@ -17,6 +17,42 @@
         <div class="card shadow-sm rounded-4 job-box">
           <div class="card-body text-center">
             <h5 class="card-title">Active Jobs</h5>
+            <div class="row g-2 justify-content-center" id="job-cards">
+            {% for job in active_jobs %} <!-- Loop through all jobs -->
+              <!-- Each job gets a small Bootstrap card -->
+              <div class="col-12 col-md-10 col-lg-8">
+                <div class="card shadow-sm">
+                  <div class="card-body p-3 {{ job.status|lower }}">
+                    <!-- Display section -->
+                    <div class="display-mode">
+                      <h6 class="card-title mb-1">{{ job.driver.firstname }} {{ job.driver.lastname }}</h6>
+                      <p class="card-text mb-1">{{ job.driver.role }}</p>
+                      <small class="text-muted">{{ job.timestamp }}</small>
+                      <p class="card-text mb-1">{{job.license_plate.state}} Truck #{{ job.license_plate.plate_number }}</p>
+                      <p class="card-text mb-1">Targeting {{ job.port_location }}</p>
+                      <p class="card-text mb-1">{{ job.get_job_type_display }} Job</p> <!-- Display job type, keeping in mind that job_type is a tuple -->
+                      <p class="card-text mb-1">Cargo #{{ job.cargo_id }}</p>
+                      <p class="card-text mb-1">Job Status: {{ job.status }}</p>
+                      <small class="text-muted">Assigned Time: {{ job.target_timestamp }}</small>
+                      <small class="text-muted">{{ job.description }}</small>
+                      <div class="text-end">
+                        <!-- Delete Button -->
+                        <form method="POST" action="{% url 'delete_job' job.id %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this job?');">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <!-- Message shown if no jobs are available -->
+              <p class="text-muted text-center">No active jobs available.</p>
+            {% endfor %}
+            </div> <!-- Close row -->
           </div>
         </div>
       </div>
@@ -24,6 +60,44 @@
         <div class="card shadow-sm rounded-4 job-box">
           <div class="card-body text-center">
             <h5 class="card-title">Scheduled Jobs</h5>
+            <div class="row g-2 justify-content-center" id="job-cards">
+            {% for job in scheduled_jobs %} <!-- Loop through all jobs -->
+              <!-- Each job gets a small Bootstrap card -->
+              <div class="col-12 col-md-10 col-lg-8">
+                <div class="card shadow-sm">
+                  <div class="card-body p-3 {{ job.status|lower }}">
+                    <!-- Display section -->
+                    <div class="display-mode">
+                      <h6 class="card-title mb-1">{{ job.driver.firstname }} {{ job.driver.lastname }}</h6>
+                      <p class="card-text mb-1">{{ job.driver.role }}</p>
+                      <small class="text-muted">{{ job.timestamp }}</small>
+                      <p class="card-text mb-1">{{job.license_plate.state}} Truck #{{ job.license_plate.plate_number }}</p>
+                      <p class="card-text mb-1">Targeting {{ job.port_location }}</p>
+                      <p class="card-text mb-1">{{ job.get_job_type_display }} Job</p> <!-- Display job type, keeping in mind that job_type is a tuple -->
+                      <p class="card-text mb-1">Cargo #{{ job.cargo_id }}</p>
+                      <p class="card-text mb-1">Job Status: {{ job.status }}</p>
+                      {% if job.status == 'Approved' and job.target_timestamp != NULL %}
+                          <small class="text-muted">Assigned Time: {{ job.target_timestamp }}</small>
+                      {% endif %}
+                      <small class="text-muted">{{ job.description }}</small>
+                      <div class="text-end">
+                        <!-- Delete Button -->
+                        <form method="POST" action="{% url 'delete_job' job.id %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this job?');">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <!-- Message shown if no jobs are available -->
+              <p class="text-muted text-center">No scheduled jobs available.</p>
+            {% endfor %}
+            </div> <!-- Close row -->
           </div>
         </div>
       </div>
@@ -31,6 +105,42 @@
         <div class="card shadow-sm rounded-4 job-box">
           <div class="card-body text-center">
             <h5 class="card-title">Past Jobs</h5>
+            <div class="row g-2 justify-content-center" id="job-cards">
+            {% for job in completed_jobs %} <!-- Loop through all jobs -->
+              <!-- Each job gets a small Bootstrap card -->
+              <div class="col-12 col-md-10 col-lg-8">
+                <div class="card shadow-sm">
+                  <div class="card-body p-3 {{ job.status|lower }}">
+                    <!-- Display section -->
+                    <div class="display-mode">
+                      <h6 class="card-title mb-1">{{ job.driver.firstname }} {{ job.driver.lastname }}</h6>
+                      <p class="card-text mb-1">{{ job.driver.role }}</p>
+                      <small class="text-muted">{{ job.timestamp }}</small>
+                      <p class="card-text mb-1">{{job.license_plate.state}} Truck #{{ job.license_plate.plate_number }}</p>
+                      <p class="card-text mb-1">Targeting {{ job.port_location }}</p>
+                      <p class="card-text mb-1">{{ job.get_job_type_display }} Job</p> <!-- Display job type, keeping in mind that job_type is a tuple -->
+                      <p class="card-text mb-1">Cargo #{{ job.cargo_id }}</p>
+                      <small class="text-muted">Assigned Time: {{ job.target_timestamp }}</small>
+                      <small class="text-muted">Completed Time: {{ job.completed_timestamp }}</small>
+                      <small class="text-muted">{{ job.description }}</small>
+                      <div class="text-end">
+                        <!-- Delete Button -->
+                        <form method="POST" action="{% url 'delete_job' job.id %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this job?');">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <!-- Message shown if no jobs are available -->
+              <p class="text-muted text-center">No completed jobs available.</p>
+            {% endfor %}
+            </div> <!-- Close row -->
           </div>
         </div>
       </div>
@@ -49,11 +159,11 @@
     <div class="card shadow-sm rounded-4 job-box">
       <div class="card-body text-center">
         <h5 class="card-title">Driver Assignments</h5>
-        <ul class="list-unstyled mb-3">
+        <ul class="trulist list-unstyled mb-3">
           {% for trucker in truckers %}
-            <li>
-              <strong>{{ trucker.name }}</strong><br>
-              {{ trucker.description }}<br>
+            <li class="mb-2 readable ">
+              <strong class="readable">{{ trucker.firstname }} {{ trucker.lastname }}</strong><br>
+              {{ trucker.role }}<br>
               <small>{{ trucker.date_posted }}</small>
             </li>
           {% empty %}

@@ -3,6 +3,7 @@ from truckmanagement.models import trucker
 
 def nav_items(request):
     nav_options = []
+    display_job_start = False
 
     if request.user.is_authenticated:
         if request.user.groups.filter(name="Driver").exists():
@@ -16,6 +17,7 @@ def nav_items(request):
                 {"label": "Driver Directory", "url": "/truckmanagement/driverdirectory/"},
                 {"label": "Fleet Identification", "url": "/truckmanagement/licenseplates/"},
             ]
+            display_job_start = True
         elif request.user.groups.filter(name="Port").exists():
             nav_options = [
                 {"label": "Home", "url": "/portinterface/"},
@@ -33,8 +35,8 @@ def nav_items(request):
     
 
     license_plates = LicensePlate.objects.all()
-    truckers = trucker.objects.all()
-
+    filtered_truckers = trucker.objects.filter(organization__in=[request.user.organization, "Independent"]).order_by('-date_posted') if request.user.is_authenticated else trucker.objects.all().order_by('-date_posted')
+    print(filtered_truckers)
     for option in nav_options:
         if path.startswith(option["url"]):
             center = option
@@ -55,5 +57,6 @@ def nav_items(request):
         "center_item": center_item,
         "left_items": left_items,
         "license_plates": license_plates,
-        "truckers": truckers
+        "display_job_start": display_job_start,
+        "filtered_truckers": filtered_truckers
     }

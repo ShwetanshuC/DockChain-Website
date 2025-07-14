@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect
 
 #sign up page
 from .forms import CustomUserCreationForm
+from .forms import PortUserCreationForm
+from truckmanagement.models import trucker
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
@@ -22,7 +24,15 @@ class TruckDriverSignUpView(CreateView):
         return "/driverinterface/"
 
     def form_valid(self, form):
+        firstname = form.cleaned_data.get('first_name')
+        lastname = form.cleaned_data.get('last_name')
+        role = "Independent Driver"
+        organization = "Independent"
+        trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization)
+            
         user = form.save()
+        user.organization = organization
+        user.save()
         group = Group.objects.get(name="Driver")
         user.groups.add(group)
         login(self.request, user)
@@ -85,7 +95,7 @@ class TruckCompanySignUpView(CreateView):
 
 # Port Operator Sign Up View
 class PortSignUpView(CreateView):
-    form_class = CustomUserCreationForm
+    form_class = PortUserCreationForm
     template_name = "registration/port_signup.html"
     def get_success_url(self):
         return "/portinterface/"

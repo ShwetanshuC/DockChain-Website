@@ -40,19 +40,38 @@ General Interface:
 
 Start Job:
 
-1. Select port location
+1. Select port location (database entry)
 
-2. Pickup or dropoff
+2. Pickup or dropoff (databse entry)
 
-3. Select assigned Trucker
+3. Select assigned Trucker 
 
 4. Select assigned vehicle
 
-5. ID of cargo being handled
+5. ID of cargo being handled in addition description of what cargo is (2 seaparate entries)
 
 6. Description of job (request to port)
 
-7. Sends request to port and port has to approve before entry is granted
+7. Sends request to port and port has to approve before entry is granted (awaiting response, approved, denied)
+
+(8. Initalized time)
+(9. Approved time)
+(10. Target dropoff time)
+Port 
+
+1. Approve deny or awaiting
+
+2. After approval, sent back to truck company (in Approved Jobs table)
+
+Confirmation of some sort (verified database)
+
+after verification goes to the Trucker
+
+DRIVER
+
+SCheduled Job 
+
+When the time for job comes, it gets moved to an active job
 
 Active/Scheduled Job:
 
@@ -64,6 +83,8 @@ Active/Scheduled Job:
 
 4. After job becomes active, worker is prompted to start and will be tracked (available for trucking company and port)
 
+- Possible edit to 3 and 4: once job is approved, a specific dropoff time is designated 
+    - The driver can then start the job any time before this date
 5. Full status of worker shown (entry into port, license plate and fingerprint verification, drop off or pickup completion, and exit)
 
 6. After completion, animation/notification showing job is complete and job is moved into the past jobs section
@@ -94,3 +115,39 @@ Change Password:
     Custom change password page
 
 Delete Account Button
+
+Notes from 7/12 and 7/13:
+- Trucking Companies and Ports now have different user creation forms and models:
+    Companies have an "organization" tag to identify their truckers
+    Ports have a "port_location" tag for identification and filtering
+- Jobs are passed from companies to ports to be approved, then back to companies and then to assigned truckers to be started
+    - New statuses were created for this (Pending, Approved, Denied, InProgress, SecurityCleared, CargoPickedUp, Completed)
+    - Statuses are color-coded
+    - Columns for job filtering (active, pending, completed) are functional
+- New truck users are now initialized whenever a trucker is created by a port
+    Said users have an 'organization' property for filtering/selection
+    This replaces the need for a new cargo broker - the old trucker account page just creates cargo brokers
+- Permissions update: only truck corporations can start jobs
+- Within trucker dropdown, only general cargo brokers & your truckers will appear (for checking organizations, lowercase then cocacenate)
+- PHP initial setup is likely complete (on Leon's computer)
+Migrations:  
+    + Add field first_name to user
+    + Add field last_name to user
+    + Add field organization to user
+    ~ Alter field port_location on user
+    + Add field organization to trucker
+
+
+7/14 Morning
+
+Docking location (Dock ____)
+
+Trucker broker
+
+Name
+Description of services jobs needed
+
+Job is put out 
+
+Sign up
+
