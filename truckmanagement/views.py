@@ -31,18 +31,23 @@ def trucker_list(request):
     #createjob(request)
     #return redirect('driverdirectory')
 def createjob(request):
-    driver_id = request.POST.get('driver')
-    plate_id = request.POST.get('license_plate')
+    if (not request.user.is_cargo_broker):
+        driver_id = request.POST.get('driver')
+        plate_id = request.POST.get('license_plate')
     port_location = request.POST.get('port_location')
     job_type = request.POST.get('job_type')
     cargo_id = request.POST.get('cargo_id')
     description = request.POST.get('description', 'No description provided')
+    isForSignup = request.user.is_cargo_broker
+    organization = request.user.organization
 
-    if driver_id and plate_id:
-        driver_obj = get_object_or_404(trucker, id=driver_id)
-        plate_obj = get_object_or_404(LicensePlate, id=plate_id)
-        Job.objects.create(driver=driver_obj, license_plate=plate_obj, port_location=port_location, job_type=job_type, cargo_id=cargo_id, description=description)
-
+    if (not request.user.is_cargo_broker):
+        if driver_id and plate_id:
+            driver_obj = get_object_or_404(trucker, id=driver_id)
+            plate_obj = get_object_or_404(LicensePlate, id=plate_id)
+            Job.objects.create(driver=driver_obj, license_plate=plate_obj, port_location=port_location, job_type=job_type, cargo_id=cargo_id, description=description, forSignUp=isForSignup, organization=organization)
+    else:
+        Job.objects.create(driver=None, license_plate_id=None, port_location=port_location, job_type=job_type, cargo_id=cargo_id, description=description, forSignUp=isForSignup, organization=organization)
 def is_trucking_company(user):
     return user.is_superuser or user.groups.filter(name='Trucking Company').exists()
 
@@ -52,8 +57,11 @@ def generate_random_password():
 @login_required(login_url='/accounts/login/')
 @user_passes_test(is_trucking_company, login_url='/accounts/unauthorized/')
 def truckmanagement(request): 
-    truckers = trucker.objects.all().order_by('-date_posted')
-    jobs = Job.objects.all().order_by('timestamp')
+    if request.user.is_cargo_broker:
+        truckers = trucker.objects.filter(organization="Independent").order_by('-date_posted')
+    else:
+        truckers = trucker.objects.filter(organization=request.user.organization).order_by('-date_posted')
+    jobs = Job.objects.filter(organization=request.user.organization).order_by('timestamp')
     active_jobs = jobs.filter(status__in=['InProgress', 'SecurityCleared', 'CargoPickedUp'])
     scheduled_jobs = jobs.filter(status__in=['Pending', 'Approved', 'Denied'])
     completed_jobs = jobs.filter(status='Completed')
@@ -75,7 +83,11 @@ def truckmanagement(request):
     return render(request, "interface1.html", {'truckers': truckers, 'jobs': jobs, 'active_jobs': active_jobs, 'scheduled_jobs': scheduled_jobs, 'completed_jobs': completed_jobs, 'locations': locations, 'form': form})
 
 def driverdirectory(request): 
-    truckers = trucker.objects.all().order_by('-date_posted')
+    if request.user.is_cargo_broker:
+        truckers = trucker.objects.filter(organization="Independent").order_by('-date_posted')
+    else:
+        truckers = trucker.objects.filter(organization=request.user.organization).order_by('-date_posted')
+    
     locations = User.objects.filter(groups__name='Port').values_list('port_location', flat=True).distinct()
     
     if request.method == 'POST':
@@ -133,7 +145,9 @@ def new_trucker(request, user_id, new_password):
 def delete_trucker(request, id):
     if request.method == 'POST':
         trucker_to_delete = get_object_or_404(trucker, id=id)
+        user_to_delete = get_object_or_404(User, first_name=trucker_to_delete.firstname.lower(), last_name=trucker_to_delete.lastname.lower())
         trucker_to_delete.delete()
+        user_to_delete.delete()
     return redirect('driverdirectory')
 
 def delete_job(request, id):
@@ -142,8 +156,22 @@ def delete_job(request, id):
         job_to_delete.delete()
     return redirect('truckmanagement')
 
+def select_trucker(request, job_id):
+    if request.method == 'POST':
+        trucker_id = request.POST.get('trucker_id')
+        job = get_object_or_404(Job, id=job_id)
+        _trucker = get_object_or_404(trucker, id=trucker_id)
+        job.driver = _trucker
+        job.license_plate = LicensePlate.objects.get(plate_number=_trucker.truck_license, state=_trucker.state)
+        job.save()
+    return redirect('truckmanagement')
+
 # View for license plates
 def licenseplates(request):
+    if request.user.is_cargo_broker:
+        truckers = trucker.objects.filter(organization="Independent").order_by('-date_posted')
+    else:
+        truckers = trucker.objects.filter(organization=request.user.organization).order_by('-date_posted')
     license_plates = LicensePlate.objects.all().order_by('-date_added')
     locations = User.objects.filter(groups__name='Port').values_list('port_location', flat=True).distinct()
 
@@ -152,6 +180,7 @@ def licenseplates(request):
 
         if action == 'add_plate':
             form = LicensePlateForm(request.POST)
+            form.organization = request.user.organization
             if form.is_valid():
                 form.save()
                 return redirect('licenseplates')
@@ -175,7 +204,7 @@ def licenseplates(request):
             return redirect('licenseplates')
 
     form = LicensePlateForm()
-    return render(request, "licenseplates.html", {'locations': locations, 'license_plates': license_plates, 'form': form})
+    return render(request, "licenseplates.html", {"truckers": truckers, 'locations': locations, 'license_plates': license_plates, 'form': form})
 
 
 #start job

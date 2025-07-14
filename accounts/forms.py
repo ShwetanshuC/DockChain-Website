@@ -8,7 +8,7 @@ User = get_user_model()
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ("email", "first_name", "last_name", "qualifications")  # Add more if needed (e.g., "name")
+        fields = ("email", "first_name", "last_name", "qualifications", "state", "truck_license")  # Add more if needed (e.g., "name")
 
 class PortUserCreationForm(UserCreationForm):
     class Meta:
@@ -18,4 +18,4 @@ class PortUserCreationForm(UserCreationForm):
 class CompanyUserCreationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ("email", "organization", "isCargoBroker", "services")  # Add more if needed (e.g., "name")
+        fields = ("email", "organization", "is_cargo_broker", "services")  # Add more if needed (e.g., "name")

@@ -145,8 +145,31 @@
           </div>
         </div>
       </div>
-    
-
+{% if user.organization == 'Independent' %}
+<div class="job-actions-wrapper">
+  <div class="container text-center">
+    <div class="row justify-content-center g-2">
+      <h4>Available Independent Jobs</h4>
+      <div class="col-md-10">
+        <div class="card shadow-sm rounded-4 job-box">
+        {% for jobs in available_jobs %}
+        <div class="card shadow-sm rounded-3 job-box jobsignup">
+          <div class="card-body text-center">
+            <p class="card-text">Job Type: {{ jobs.get_job_type_display }}</p>
+            <p class="card-text">Cargo ID: {{ jobs.cargo_id }}</p>
+            <p class="card-text">Description: {{ jobs.description }}</p>
+            <form method="POST" action="{% url 'apply_for_job' jobs.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Apply for Job</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 
 {% else %}
 <p>You are not logged in</p>
