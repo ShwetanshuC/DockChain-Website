@@ -1,0 +1,29 @@
+{% extends "base.html" %} 
+{% load static %}
+{% block title %}Driver Registration{% endblock %} 
+
+{% block interface_content %}
+
+<link rel="stylesheet" href=" {%static 'CompanyTruckerForm/style.css'%}">
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="text-center w-100" style="max-width: 500px;">
+    <h2 class="form-title mb-4">Add New Trucker</h2>
+    <form method="POST" class="trucker-form" style="max-width: 100%;">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="add">
+      <div class="mb-3">
+        <input type="text" name="firstname" class="form-control" placeholder="First Name" required>
+      </div>
+      <div class="mb-3">
+        <input type="text" name="lastname" class="form-control" placeholder="Last Name" required>
+      </div>
+      <div class="mb-3">
+        <input type="text" name="role" class="form-control" placeholder="Role" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Add Trucker</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

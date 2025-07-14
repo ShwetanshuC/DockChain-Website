@@ -128,15 +128,17 @@
             {% if user.is_authenticated %}
               {% if user.groups.all.0.name == "Driver" %}
                 <li><a class="dropdown-item" href="/driverinterface/">Dashboard</a></li>
+                <li><a class="dropdown-item" href="/accounts/driverDocumentation/">How To</a></li>
               {% elif user.groups.all.0.name == "Trucking Company" %}
                 <li><a class="dropdown-item" href="/truckmanagement/">Dashboard</a></li>
+                <li><a class="dropdown-item" href="/accounts/truckCompanyDocumentation/">How To</a></li>
               {% elif user.groups.all.0.name == "Port" %}
                 <li><a class="dropdown-item" href="/portinterface/">Dashboard</a></li>
+                <li><a class="dropdown-item" href="/accounts/portDocumentation/">How To</a></li>
               {% elif user.is_superuser %}
                 <li><a class="dropdown-item" href="/admin/">Admin Panel</a></li>
               {% endif %}
               <li><a class="dropdown-item" href="/accounts/manageprofile/">Manage Profile</a></li>
-              <li><a class="dropdown-item" href="/documentation/">Documentation</a></li>
               <li><hr class="dropdown-divider"></li>
               <li>
                 <form method="post" action="{% url 'logout' %}">
@@ -160,5 +162,6 @@
 
 
 {% block interface_content %}
+
 {% endblock %}
 {%endblock%}

@@ -1,5 +1,13 @@
 body {
-    background-color: #2f3038;
+    background-image: url('../Home/Images/background.png'); /* Confirm this path is correct relative to this CSS file */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* for Safari support */
+    background-color: rgba(0, 0, 0, 0.5); /* fallback background color */
+    min-height: 100vh;
+    margin: 0;
 }
 
 h1 {
@@ -34,37 +42,37 @@ h1 {
 
 .pending {
     background-color: #ffe5c1ff;
-    background-opacity: 0.8;
+    opacity: 0.8;
 }
 
 .approved {
     background-color: #5bc0de;
-    background-opacity: 0.8;
+    opacity: 0.8;
 }
 
 .denied {
     background-color: #d9534f;
-    background-opacity: 0.8;
+    opacity: 0.8;
 }
 
 .inprogress {
     background-color: #d900ffff;
-    background-opacity: 0.8;
+    opacity: 0.8;
 }
 
 .securitycleared {
     background-color: #ea72ffff;
-    background-opacity: 0.8;
+    opacity: 0.8;
 }
 
 .cargopickedup {
     background-color: #f3aeffff;
-    background-opacity: 0.8;
+    opacity: 0.8;
 }
 
 .completed {
     background-color: #00ff2aff;
-    background-opacity: 0.8;
+    opacity: 0.8;
 }
 
 /*.readable {

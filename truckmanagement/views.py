@@ -223,3 +223,31 @@ def start_job(request):
                 form.save()
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_required(login_url='/accounts/login/')
+@user_passes_test(is_trucking_company, login_url='/accounts/unauthorized/')
+def add_trucker(request):
+    if request.method == 'POST':
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
+        role = request.POST.get('role')
+        organization = request.user.organization if request.user.is_authenticated else "None"
+        cocacenatedorg = (organization.lower()).replace(" ", "")
+        newpassword = generate_random_password()
+        print("Generated password:", newpassword)
+
+        trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization)
+        truckuser = User.objects.create_user(
+            f"{firstname.lower()}.{lastname.lower()}@{cocacenatedorg}.com",
+            newpassword,
+        )
+        truckuser.first_name = firstname
+        truckuser.last_name = lastname
+        truckuser.organization = organization
+        truckuser.save()
+
+        group = Group.objects.get(name="Driver")
+        truckuser.groups.add(group)
+        return redirect('new_trucker', user_id=truckuser.id, new_password=newpassword)
+
+    return render(request, 'companytruckerform.html')
