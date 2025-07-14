@@ -8,7 +8,7 @@
 
 {% if user.is_authenticated %}
 
-<h1>Welcome {{ user.username }}</h1>
+<h1 class="mt-4">Welcome {{ user.email }}</h1>
 
 <div class="job-actions-wrapper">
   <div class="container text-center">
@@ -104,11 +104,23 @@
       <div class="col-md-4">
         <div class="card shadow-sm rounded-4 job-box">
           <div class="card-body text-center">
-            <h5 class="card-title">Past Jobs</h5>
-            <div class="row g-2 justify-content-center" id="job-cards">
+            <h5 class="card-title">Updates</h5>
+            <div class="alert alert-info p-2" role="alert">
+              New job scheduling features added. Maintenance scheduled for July 15.
+            </div>
+            <h6 class="mt-3">Activity Log</h6>
+            <div class="activity-log mt-3">
+              {% for log in activity_logs %}
+                <div class="alert alert-secondary p-2 mb-2">
+                  <small>{{ log.timestamp|date:"M d, Y H:i" }}<br>{{ log.message }}</small>
+                </div>
+              {% empty %}
+                <div class="text-muted">No recent activity logged.</div>
+              {% endfor %}
+            </div>
             {% for job in completed_jobs %} <!-- Loop through all jobs -->
               <!-- Each job gets a small Bootstrap card -->
-              <div class="col-12 col-md-10 col-lg-8">
+              <div class="col-12 col-md-10 col-lg-8 mx-auto my-2">
                 <div class="card shadow-sm">
                   <div class="card-body p-3 {{ job.status|lower }}">
                     <!-- Display section -->
@@ -140,58 +152,16 @@
               <!-- Message shown if no jobs are available -->
               <p class="text-muted text-center">No completed jobs available.</p>
             {% endfor %}
-            </div> <!-- Close row -->
+            <div class="mt-3 text-center">
+              <!-- TODO: Change URL to 'past_jobs_page' once implemented -->
+              <a href="{% url 'home' %}" class="btn btn-outline-primary btn-sm">View Full Job History</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="row justify-content-center g-4 mt-4">
-  <div class="col-md-4">
-    <div class="card shadow-sm rounded-4 job-box">
-      <div class="card-body text-center">
-        <h5 class="card-title">Maintenance Logs</h5>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card shadow-sm rounded-4 job-box">
-      <div class="card-body text-center">
-        <h5 class="card-title">Driver Assignments</h5>
-        <ul class="trulist list-unstyled mb-3">
-          {% for trucker in truckers %}
-            <li class="mb-2 readable ">
-              <strong class="readable">{{ trucker.firstname }} {{ trucker.lastname }}</strong><br>
-              {{ trucker.role }}<br>
-              <small>{{ trucker.date_posted }}</small>
-            </li>
-          {% empty %}
-            <li>No truckers available.</li>
-          {% endfor %}
-        </ul>
-        <form method="POST">
-          {% csrf_token %}
-          <div class="mb-3">
-            <input type="text" name="name" class="form-control" placeholder="Trucker Name" required>
-          </div>
-          <div class="mb-3">
-            <textarea name="description" class="form-control" placeholder="Description" rows="3" required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary">Add Trucker</button>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card shadow-sm rounded-4 job-box">
-      <div class="card-body text-center">
-        <h5 class="card-title">Fuel Reports</h5>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 {% else %}
 <p>You are not logged in</p>
