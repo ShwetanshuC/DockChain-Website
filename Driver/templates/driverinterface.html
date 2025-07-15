@@ -78,7 +78,7 @@
                       <small class="text-muted">{{ job.description }}</small>
                       <div class="text-end">
                       <!-- Start Job Button -->
-                       {% if job.status == 'Approved' and job.target_timestamp != NULL %}
+                       {% if job.status == 'Approved' and job.target_timestamp != NULL and job.target_timestamp > timezone.now and job == scheduled_jobs.first %}
                         <form method="POST" action="{% url 'start_job' job.id %}">
                           {% csrf_token %}
                           <button type="submit" class="btn btn-sm btn-success" title="Start Job" onclick="return confirm('Are you sure you want to start this job?');">Start Job</button>
