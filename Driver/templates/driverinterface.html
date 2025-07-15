@@ -63,14 +63,22 @@
                       {% if job.status == 'Approved' and job.target_timestamp != None %}
                         <p class="fw-semibold mb-1"><span class="text-muted">Assigned Time:</span> {{ job.target_timestamp }}</p>
                       {% endif %}
-                      <p class="fw-semibold mb-1"><span class="text-muted">Description:</span> {{ job.description }}</p>
-                      <div class="text-end mt-2">
-                        {% if job.status == 'Approved' and job.target_timestamp != None %}
-                          <form method="POST" action="{% url 'start_job' job.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-success" title="Start Job" onclick="return confirm('Are you sure you want to start this job?');">Start Job</button>
-                          </form>
-                        {% endif %}
+                      <small class="text-muted">{{ job.description }}</small>
+                      <div class="text-end">
+                      <!-- Start Job Button -->
+                       {% if job.status == 'Approved' and job.target_timestamp != NULL %}
+                        <form method="POST" action="{% url 'start_job' job.id %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-success" title="Start Job" onclick="return confirm('Are you sure you want to start this job?');">Start Job</button>
+                        </form>
+                      {% endif %}
+                        <!-- Delete Button
+                        <form method="POST" action="{% url 'delete_job' job.id %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this job?');">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </form> -->
                       </div>
                     </div>
                   </div>

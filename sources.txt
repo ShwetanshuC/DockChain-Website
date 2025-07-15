@@ -142,7 +142,8 @@ Migrations:
 
 Docking location (Dock ____)
 
-Trucker broker
+Cargo broker & independent driver handshake built! 
+- Everything works here
 
 Name
 Description of services jobs needed
@@ -150,4 +151,6 @@ Description of services jobs needed
 Job is put out 
 
 Sign up
+
+
 
