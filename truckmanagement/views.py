@@ -9,6 +9,9 @@ from .models import trucker, LicensePlate, Job
 from .forms import TruckerForm, LicensePlateForm, JobForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 import secrets
 
@@ -54,6 +57,66 @@ def is_trucking_company(user):
 def generate_random_password():
     return secrets.token_urlsafe(16)  # Generates a secure random password
 
+
+TEST_PLATES = ["ABC1234", "XYZ5678", "LMN9101", "QRS2345", "TUV6789"]
+
+#@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def arduino_endpoint(request):
+    print(f"Method: {request.method}")
+    print(f"Content-Type: {request.content_type}")
+    print(f"Body: {request.body}")
+    print(f"POST data: {request.POST}")
+    if request.method == "GET":
+        print("Received GET request")
+        match request.GET.get("value"):
+            case "active_jobs":
+                jobs = Job.objects.filter(job_status="InProgress").values()
+                return JsonResponse(list(jobs), safe=False)
+
+            case "plate_initial":
+                return JsonResponse({"plate": TEST_PLATES[0]})
+
+            case "plate_final":
+                return JsonResponse({"plate": TEST_PLATES[1]})
+
+            case "status":
+                job_id = request.GET.get("job_id")
+                if not job_id:
+                    return HttpResponseBadRequest()
+                try:
+                    return HttpResponse(Job.objects.get(job_id=job_id).status)
+                except Job.DoesNotExist:
+                    return HttpResponse("Not found", status=404)
+
+            case "temp_finger":
+                job_id = request.GET.get("job_id")
+                if not job_id:
+                    return HttpResponseBadRequest()
+                try:
+                    return HttpResponse(Job.objects.get(job_id=job_id).temp_finger)
+                except Job.DoesNotExist:
+                    return HttpResponse("Not found", status=404)
+
+            case _:
+                return HttpResponse(status=400)
+
+    # POST method
+    job_id = request.POST.get("job_id")
+    field = request.POST.get("column")
+    value = request.POST.get("message")
+
+    if not all([job_id, field, value]):
+        return HttpResponseBadRequest()
+
+    try:
+        job = Job.objects.get(job_id=job_id)
+        setattr(job, field, value)  # Assume valid field; fail loudly if not
+        job.save()
+        return HttpResponse("OK")
+    except Job.DoesNotExist:
+        return HttpResponse("Not found", status=404)
+    
 @login_required(login_url='/accounts/login/')
 @user_passes_test(is_trucking_company, login_url='/accounts/unauthorized/')
 def truckmanagement(request): 

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from truckmanagement.views import createjob
+from truckmanagement.models import Job
 
 def home(request):
     if request.user.is_authenticated:
