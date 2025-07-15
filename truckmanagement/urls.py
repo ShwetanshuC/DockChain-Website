@@ -9,4 +9,5 @@ urlpatterns = [
     path("licenseplates/", views.licenseplates, name="licenseplates"),
     path("new_trucker/<int:user_id>/<str:new_password>/", views.new_trucker, name="new_trucker"),
     path("companytruckerform/", views.add_trucker, name="companytruckerform"),
+    path("select_trucker/<int:job_id>/", views.select_trucker, name="select_trucker"),
 ]

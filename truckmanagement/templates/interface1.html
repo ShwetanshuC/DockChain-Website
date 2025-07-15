@@ -88,6 +88,22 @@
                             <i class="bi bi-trash"></i>
                           </button>
                         </form>
+                        <!-- Select Trucker interface - for cargo brokers -->
+                        {% if user.is_cargo_broker and job.driver is None %}
+                          <form method="POST" action="{% url 'select_trucker' job.id %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                              <label for="truckerSelect" class="form-label">Assign Trucker</label>
+                              <select class="form-select" id="truckerSelect" name="trucker_id" required>
+                                <option value="" disabled selected>Choose a trucker</option>
+                                {% for trucker in job.driver_applications.all %}
+                                  <option value="{{ trucker.id }}">{{ trucker.firstname }} {{ trucker.lastname }} - {{ trucker.qualifications }} </option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Assign Trucker</button>
+                          </form>
+                        {% endif %}
                       </div>
                     </div>
                   </div>

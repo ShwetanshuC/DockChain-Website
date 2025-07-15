@@ -47,12 +47,13 @@ def deny_job(request, id):
     job.save()
     return redirect("port")
 
-def timestamp_job(request, id):
+def timestamp_locate_job(request, job_id):
     if (request.method != 'POST'):
         return redirect("port")
-    job = get_object_or_404(Job, id=id)
+    job = get_object_or_404(Job, id=job_id)
     raw_timestamp = request.POST.get('target_timestamp')
     job.target_timestamp = datetime.datetime.strptime(raw_timestamp, "%Y-%m-%d %H:%M:%S.%f")
+    job.docking_location = request.POST.get('target_cargo_location')
     job.save()
     return redirect("port")
 

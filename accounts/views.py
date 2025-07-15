@@ -32,8 +32,12 @@ class TruckDriverSignUpView(CreateView):
         qualifications = form.cleaned_data.get('qualifications')
         role = "Independent Driver"
         organization = "Independent"
-        trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization, qualifications=qualifications)
-
+        truck_license = form.cleaned_data.get('truck_license')
+        state = form.cleaned_data.get('state')
+        trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization, qualifications=qualifications, truck_license=truck_license, state=state)
+        state = form.cleaned_data.get('state')
+        truck_license = form.cleaned_data.get('truck_license')
+        LicensePlate.objects.create(state=state, plate_number=truck_license, organization=organization)
         user = form.save()
         user.organization = organization
         user.save()

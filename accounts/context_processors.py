@@ -35,8 +35,12 @@ def nav_items(request):
     
 
     license_plates = LicensePlate.objects.all()
-    filtered_truckers = trucker.objects.filter(organization__in=[request.user.organization, "Independent"]).order_by('-date_posted') if request.user.is_authenticated else trucker.objects.all().order_by('-date_posted')
-    print(filtered_truckers)
+    filtered_truckers = trucker.objects.all().order_by('-date_posted')
+    if request.user.is_authenticated:
+        if request.user.is_cargo_broker:
+            filtered_truckers = trucker.objects.filter(organization="Independent").order_by('-date_posted') 
+        else:
+            filtered_truckers = trucker.objects.filter(organization=request.user.organization).order_by('-date_posted')
     for option in nav_options:
         if path.startswith(option["url"]):
             center = option
