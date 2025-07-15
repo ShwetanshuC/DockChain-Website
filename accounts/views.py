@@ -1,3 +1,5 @@
+from django.http import JsonResponse
+from truckmanagement.models import Job
 from django.shortcuts import render, HttpResponse
 from django.http import HttpResponseRedirect
 
@@ -139,6 +141,43 @@ from django.contrib import messages
 @login_required
 def ManageProfile(request):
     return render(request, "manageprofile.html")
+
+
+# Unified Live Search View
+def unified_live_search(request):
+    query = request.GET.get("q", "")
+    trucker_results = []
+    plate_results = []
+    job_results = []
+
+    if query:
+        trucker_results = list(
+            trucker.objects.filter(
+                Q(firstname__icontains=query) |
+                Q(lastname__icontains=query) |
+                Q(role__icontains=query)
+            ).values("firstname", "lastname", "role")
+        )
+
+        plate_results = list(
+            LicensePlate.objects.filter(
+                Q(state__icontains=query) |
+                Q(plate_number__icontains=query)
+            ).values("state", "plate_number")
+        )
+
+        job_results = list(
+            Job.objects.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query)
+            ).values("title", "description")
+        )
+
+    return JsonResponse({
+        "truckers": trucker_results,
+        "license_plates": plate_results,
+        "jobs": job_results
+    })
 
 def DriverDocumentation(request):
     return render(request, "driverDocumentation.html")

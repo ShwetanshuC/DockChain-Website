@@ -14,6 +14,7 @@ urlpatterns = [
     path("signup/port/", PortSignUpView.as_view(), name="signup_port"),
     path("search/", views.search_truckers, name="search_truckers"),
     path("search_license_plates/", views.search_license_plates, name="search_license_plates"),
+    path("search_all/", views.unified_live_search, name="search_all"),
     path("unauthorized/", views.unauthorized_view, name="unauthorized"),
     path("login/", CustomLoginView.as_view(), name="login"),
     path("manageprofile/", views.ManageProfile, name="manageprofile"),
