@@ -13,23 +13,23 @@
     <div class="form_style">
       {% csrf_token %}  
       <div class="mb-1 formattedfield">
-        <p class="text-muted">Email</p>
+        <p>Email</p>
         <input type="text" name="email" class="form-control form-control-sm" required>
       </div>
       <div class="mb-1 formattedfield">
-        <p class="text-muted">Password</p>
+        <p>Password</p>
         <input type="text" name="password" class="form-control form-control-sm" required>
       </div>
       <div class="mb-1 formattedfield">
-        <p class="text-muted">Organization</p>
+        <p>Organization</p>
         <input type="text" name="organization" class="form-control form-control-sm" required>
       </div>
       <div class="mb-1 formattedfield">
-        <p class="text-muted">Cargo Broker?</p>
-        <input type="text" name="is_cargo_broker" class="form-control form-control-sm" required>
+        <p>Cargo Broker?</p>
+        <input type="checkbox" name="is_cargo_broker" class="form-control form-control-sm" required>
       </div>
       <div class="mb-1 formattedfield">
-        <p class="text-muted">Services, in list format</p>
+        <p>Services, in list format</p>
         <input type="text" name="services" class="form-control form-control-sm" required>
       </div>
       <!-- {{ form }}-->
