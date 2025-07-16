@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block interface_content %}
+
+
+ <h2>Enter the 6-Digit Code Sent to Your Email</h2>
+
+  <form method="POST" action="{% url 'verify_code' %}" id="code-form">
+    {% csrf_token %}
+
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <div class="code-container">
+      {% for i in "123456" %}
+        <input type="text" class="code-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" required>
+      {% endfor %}
+    </div>
+
+    <!-- Hidden input that will be filled with the complete code -->
+    <input type="hidden" name="code" id="code-hidden">
+
+    <br><br>
+    <button type="submit">Verify Code</button>
+  </form>
+
+<script src="{%static 'EnterCodePasswordChange/script.js'%}"></script>
+
+
+
+
+{% endblock %}

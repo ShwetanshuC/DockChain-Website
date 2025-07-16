@@ -22,5 +22,5 @@ urlpatterns = [
     path("driverDocumentation/", views.DriverDocumentation, name="DriverDocumentation"),
     path("portDocumentation/", views.PortDocumentation, name="PortDocumentation"),
     path("truckCompanyDocumentation/", views.TruckCompanyDocumentation, name="TruckCompanyDocumentation"),
-
+    
 ]
