@@ -70,3 +70,20 @@ button.form_style {
     position: relative;
     z-index: 1;
 }
+
+div.formattedfield {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    align-content: center;
+    
+    p {
+        vertical-align: center;
+    }
+
+}
+

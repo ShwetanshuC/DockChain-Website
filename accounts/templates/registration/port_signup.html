@@ -12,7 +12,16 @@
 <form method="post">
   <div class="form_style">
     {% csrf_token %}
-    {{ form }}
+    <div class="mb-1">
+        <input type="text" name="email" class="form-control form-control-sm" required>
+    </div>
+    <div class="mb-1">
+      <input type="text" name="password" class="form-control form-control-sm" required>
+    </div>
+    <div class="mb-1">
+      <input type="text" name="port_location" class="form-control form-control-sm" required>
+    </div>
+    <!--{{ form }}-->
     <button class="form_style btn btn-primary btn-lg" type="submit">Sign Up</button>
       </div>
 </form>

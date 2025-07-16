@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.utils import timezone
 from django.db import models
-from . import forms
 
 class CustomUserManager(UserManager):
     def _create_user(self, email, password, **extra_fields):
@@ -28,7 +27,7 @@ class CustomUserManager(UserManager):
         return self._create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(blank = True, default = '', unique = True, widget=forms.EmailField(attrs={"class": "emailControl"}))
+    email = models.EmailField(blank = True, default = '', unique = True)
     name = models.CharField(max_length = 255, default = '')
     first_name = models.CharField(max_length = 255, default = '')
     last_name = models.CharField(max_length = 255, default = '')

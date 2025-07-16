@@ -12,9 +12,29 @@
   <form method="post">
     <div class="form_style">
       {% csrf_token %}  
-      {{ form }}
-      <button class="form_style btn btn-primary btn-lg" type="submit">Sign Up</button>
+      <div class="mb-1 formattedfield">
+        <p class="text-muted">Email</p>
+        <input type="text" name="email" class="form-control form-control-sm" required>
       </div>
+      <div class="mb-1 formattedfield">
+        <p class="text-muted">Password</p>
+        <input type="text" name="password" class="form-control form-control-sm" required>
+      </div>
+      <div class="mb-1 formattedfield">
+        <p class="text-muted">Organization</p>
+        <input type="text" name="organization" class="form-control form-control-sm" required>
+      </div>
+      <div class="mb-1 formattedfield">
+        <p class="text-muted">Cargo Broker?</p>
+        <input type="text" name="is_cargo_broker" class="form-control form-control-sm" required>
+      </div>
+      <div class="mb-1 formattedfield">
+        <p class="text-muted">Services, in list format</p>
+        <input type="text" name="services" class="form-control form-control-sm" required>
+      </div>
+      <!-- {{ form }}-->
+      <button class="form_style btn btn-primary btn-lg" type="submit">Sign Up</button>
+    </div>
   </form>
 </body>
 {% endblock %}
