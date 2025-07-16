@@ -58,30 +58,43 @@ def generate_random_password():
     return secrets.token_urlsafe(16)  # Generates a secure random password
 
 
-TEST_PLATES = ["ABC1234", "XYZ5678", "LMN9101", "QRS2345", "TUV6789"]
-
-#@csrf_exempt
-@require_http_methods(["GET", "POST"])
+TEST_PLATES = ["EGF6647", "ABC1234", "Tech", "QRS2345", "TUV6789"]
+# @csrf_exempt
+# @require_http_methods(["GET", "POST"])
 def arduino_endpoint(request):
     print(f"Method: {request.method}")
     print(f"Content-Type: {request.content_type}")
     print(f"Body: {request.body}")
     print(f"POST data: {request.POST}")
+    print(f"GET data: {request.GET}")
     if request.method == "GET":
         print("Received GET request")
-        match request.GET.get("value"):
+        value = request.GET.get("value")
+        job_id = request.GET.get("job_id")
+        match value:
             case "active_jobs":
-                jobs = Job.objects.filter(job_status="InProgress").values()
+                jobs = Job.objects.filter(status="InProgress").values()
                 return JsonResponse(list(jobs), safe=False)
-
+            
+            case "secured_jobs":
+                jobs = Job.objects.filter(status="SecurityCleared").values()
+                return JsonResponse(list(jobs), safe=False)
+            
             case "plate_initial":
                 return JsonResponse({"plate": TEST_PLATES[0]})
+            
+            case "plates_all":
+                plates = LicensePlate.objects.all().values()
+                return JsonResponse(list(plates), safe=False)
 
             case "plate_final":
                 return JsonResponse({"plate": TEST_PLATES[1]})
+            
+            case "drivers":
+                drivers = trucker.objects.all().values()
+                return JsonResponse(list(drivers), safe=False)
 
             case "status":
-                job_id = request.GET.get("job_id")
                 if not job_id:
                     return HttpResponseBadRequest()
                 try:
@@ -90,7 +103,6 @@ def arduino_endpoint(request):
                     return HttpResponse("Not found", status=404)
 
             case "temp_finger":
-                job_id = request.GET.get("job_id")
                 if not job_id:
                     return HttpResponseBadRequest()
                 try:
@@ -102,7 +114,6 @@ def arduino_endpoint(request):
                 return HttpResponse(status=400)
 
     # POST method
-    job_id = request.POST.get("job_id")
     field = request.POST.get("column")
     value = request.POST.get("message")
 

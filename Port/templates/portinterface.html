@@ -8,7 +8,204 @@
 
 {% if user.is_authenticated %}
 
-<div class="container-fluid">
+{% if user.is_authenticated %}
+
+<h1 class="mt-4">Welcome {{ user.email }}</h1>
+
+<div class="job-actions-wrapper">
+  <div class="container text-center">
+    <div class="row justify-content-center g-4">
+      <div class="col-md-4">
+        <div class="card shadow-sm rounded-4 job-box" style="background-color: #f8f9fa;">
+          <div class="card-body text-center">
+            <h5 class="card-title">Active Jobs</h5>
+            <div class="row g-2 justify-content-center" id="job-cards">
+            {% for job in active_jobs %} <!-- Loop through all jobs -->
+              <!-- Each job gets a small Bootstrap card -->
+              <div class="col-12 col-md-12 col-lg-10">
+                <div class="card shadow-sm rounded-4 job-card-style">
+                  <div class="card-body bg-white rounded-4 searchable-card job-card border-0" style="padding: 1rem 1.5rem;">
+                    <!-- Display section -->
+                    <div class="display-mode text-start">
+                      <p class="fw-semibold mb-1"><span class="text-muted">Driver:</span> {{ job.driver.firstname }} {{ job.driver.lastname }}</p>
+                      <p class="mb-1"><span class="text-muted">Role:</span> {{ job.driver.role }}</p>
+                      <p class="mb-1"><span class="text-muted">Date:</span> {{ job.timestamp }}</p>
+                      <p class="mb-1"><span class="text-muted">Truck:</span> {{ job.license_plate.state }} #{{ job.license_plate.plate_number }}</p>
+                      <p class="mb-1"><span class="text-muted">Target Port:</span> {{ job.port_location }}</p>
+                      <p class="mb-1"><span class="text-muted">Type:</span> {{ job.get_job_type_display }} Job</p>
+                      <p class="mb-1"><span class="text-muted">Cargo ID:</span> #{{ job.cargo_id }}</p>
+                      <p class="mb-1"><span class="text-muted">Job Status:</span> {{ job.status }}</p>
+                      {% if job.status == 'Approved' and job.target_timestamp != NULL %}
+                        <p class="mb-1"><span class="text-muted">Assigned Time:</span> {{ job.target_timestamp }}</p>
+                      {% endif %}
+                      {% if job.completed_timestamp %}
+                        <p class="mb-1"><span class="text-muted">Completed Time:</span> {{ job.completed_timestamp }}</p>
+                      {% endif %}
+                      {% if job.description %}
+                        <p class="mb-1"><span class="text-muted">Notes:</span> {{ job.description }}</p>
+                      {% endif %}
+                      <div class="text-end mt-2">
+                        <form method="POST" action="{% url 'delete_job' job.id %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this job?');">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <!-- Message shown if no jobs are available -->
+              <p class="text-muted text-center">No active jobs available.</p>
+            {% endfor %}
+            </div> <!-- Close row -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm rounded-4 job-box" style="background-color: #f8f9fa;">
+          <div class="card-body text-center">
+            <h5 class="card-title">Scheduled Jobs</h5>
+            <div class="row g-2 justify-content-center" id="job-cards">
+            {% for job in scheduled_jobs %} <!-- Loop through all jobs -->
+              <!-- Each job gets a small Bootstrap card -->
+              <div class="col-12 col-md-12 col-lg-10">
+                <div class="card shadow-sm rounded-4 job-card-style">
+                  <div class="card-body bg-white rounded-4 searchable-card job-card border-0" style="padding: 1rem 1.5rem;">
+                    <!-- Display section -->
+                    <div class="display-mode text-start">
+                      <p class="fw-semibold mb-1"><span class="text-muted">Driver:</span> {{ job.driver.firstname }} {{ job.driver.lastname }}</p>
+                      <p class="mb-1"><span class="text-muted">Role:</span> {{ job.driver.role }}</p>
+                      <p class="mb-1"><span class="text-muted">Date:</span> {{ job.timestamp }}</p>
+                      <p class="mb-1"><span class="text-muted">Truck:</span> {{ job.license_plate.state }} #{{ job.license_plate.plate_number }}</p>
+                      <p class="mb-1"><span class="text-muted">Target Port:</span> {{ job.port_location }}</p>
+                      <p class="mb-1"><span class="text-muted">Type:</span> {{ job.get_job_type_display }} Job</p>
+                      <p class="mb-1"><span class="text-muted">Cargo ID:</span> #{{ job.cargo_id }}</p>
+                      <p class="mb-1"><span class="text-muted">Job Status:</span> {{ job.status }}</p>
+                      {% if job.status == 'Approved' and job.target_timestamp != NULL %}
+                        <p class="mb-1"><span class="text-muted">Assigned Time:</span> {{ job.target_timestamp }}</p>
+                      {% endif %}
+                      {% if job.completed_timestamp %}
+                        <p class="mb-1"><span class="text-muted">Completed Time:</span> {{ job.completed_timestamp }}</p>
+                      {% endif %}
+                      {% if job.description %}
+                        <p class="mb-1"><span class="text-muted">Notes:</span> {{ job.description }}</p>
+                      {% endif %}
+                      <div class="text-end mt-2">
+                        {% if job.status == 'Pending' %}
+                        <form method="POST" action="{% url 'approve_job' job.id %}" class="d-inline">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-outline-success" title="Approve" onclick="return confirm('Are you sure you want to approve this job?');">
+                            <i class="bi bi-check"></i>
+                          </button>
+                        </form>
+                        <form method="POST" action="{% url 'deny_job' job.id %}" class="d-inline">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-outline-danger" title="Deny" onclick="return confirm('Are you sure you want to deny this job?');">
+                            <i class="bi bi-x"></i>
+                          </button>
+                        </form>
+                        {% endif %}
+                        {% if job.status == 'Approved' and job.target_timestamp == None %}
+                        <form method="POST" action="{% url 'timestamp_locate_job' job.id %}" class="mt-2">
+                          {% csrf_token %}
+                          <label for="datetimepicker-{{ job.id }}" class="form-label">Target Timestamp</label>
+                          <input id="datetimepicker-{{ job.id }}" type="text" name="target_timestamp" class="form-control form-control-sm mb-2" placeholder="YYYY-MM-DD HH:MM:SS.MS" pattern="\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{2}" required>
+                          <small class="text-muted d-block mb-2">Format: YYYY-MM-DD HH:MM:SS.MS</small>
+                          <label for="target_cargo_location_{{ job.id }}" class="form-label">Target Cargo Location</label>
+                          <input id="target_cargo_location_{{ job.id }}" type="text" name="target_cargo_location" class="form-control form-control-sm mb-2" placeholder="#XXXXXX" pattern="\B#([A-Za-z0-9]{2,})(?![~!@#$%^&*()=+_`\-\|\/'\[\]\{\}]|[?.,]*\w)" required>
+                          <small class="text-muted d-block mb-2">Format: #XXXXXX</small>
+                          <button type="submit" class="btn btn-sm btn-success" title="Timestamp" onclick="return confirm('Are you sure you want to submit this timestamp?');">Submit Timestamp</button>
+                        </form>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <!-- Message shown if no jobs are available -->
+              <p class="text-muted text-center">No scheduled jobs available.</p>
+            {% endfor %}
+            </div> <!-- Close row -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+  <div class="card shadow-sm rounded-4 job-box" style="background-color: #f8f9fa;">
+    <div class="card-body text-center h-100 d-flex flex-column">
+      <h5 class="card-title">Updates</h5>
+      <div class="alert alert-info p-2" role="alert">
+        New job scheduling features added. Maintenance scheduled for July 15.
+      </div>
+      <h6 class="mt-3">Activity Log</h6>
+      <div class="activity-log mt-3">
+        {% for log in activity_logs %}
+          <div class="alert alert-secondary p-2 mb-2">
+            <small>{{ log.timestamp|date:"M d, Y H:i" }}<br>{{ log.message }}</small>
+          </div>
+        {% empty %}
+          <div class="text-muted">No recent activity logged.</div>
+        {% endfor %}
+      </div>
+
+      <div class="completed-jobs d-flex flex-column justify-content-between h-100 mt-4" style="min-height: 300px;">
+        {% if completed_jobs|length == 0 %}
+          <div class="text-center mt-auto">
+            <p class="text-muted">No completed jobs available.</p>
+          </div>
+        {% else %}
+          <div>
+            {% for job in completed_jobs %}
+              <div class="col-12 col-md-12 col-lg-10 mx-auto my-2">
+                <div class="card shadow-sm rounded-4 job-card-style">
+                  <div class="card-body bg-white rounded-4 searchable-card job-card border-0" style="padding: 1rem 1.5rem;">
+                    <div class="display-mode text-start">
+                      <p class="fw-semibold mb-1"><span class="text-muted">Driver:</span> {{ job.driver.firstname }} {{ job.driver.lastname }}</p>
+                      <p class="mb-1"><span class="text-muted">Role:</span> {{ job.driver.role }}</p>
+                      <p class="mb-1"><span class="text-muted">Date:</span> {{ job.timestamp }}</p>
+                      <p class="mb-1"><span class="text-muted">Truck:</span> {{ job.license_plate.state }} #{{ job.license_plate.plate_number }}</p>
+                      <p class="mb-1"><span class="text-muted">Target Port:</span> {{ job.port_location }}</p>
+                      <p class="mb-1"><span class="text-muted">Type:</span> {{ job.get_job_type_display }} Job</p>
+                      <p class="mb-1"><span class="text-muted">Cargo ID:</span> #{{ job.cargo_id }}</p>
+                      <p class="mb-1"><span class="text-muted">Job Status:</span> {{ job.status }}</p>
+                      {% if job.status == 'Approved' and job.target_timestamp != NULL %}
+                        <p class="mb-1"><span class="text-muted">Assigned Time:</span> {{ job.target_timestamp }}</p>
+                      {% endif %}
+                      {% if job.completed_timestamp %}
+                        <p class="mb-1"><span class="text-muted">Completed Time:</span> {{ job.completed_timestamp }}</p>
+                      {% endif %}
+                      {% if job.description %}
+                        <p class="mb-1"><span class="text-muted">Notes:</span> {{ job.description }}</p>
+                      {% endif %}
+                      <div class="text-end mt-2">
+                        <!--<form method="POST" action="{% url 'delete_job' job.id %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this job?');">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </form>-->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        <div class="text-center mt-auto">
+          <a href="{% url 'home' %}" class="btn btn-outline-primary btn-sm">View Full Job History</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+<!--<div class="container-fluid">
   <div class="row">
     <div class="col-12 text-center">
       <h1>Welcome {{ user.email }}</h1>
@@ -22,7 +219,7 @@
         </div>
         <div class="card-body job-card-style searchable-card" id="active-jobs">
           {% for job in active_jobs %}
-          <div class="card mb-3 shadow-sm">
+          <div class="card mb-3 shadow-sm" style="background-color: #f8f9fa;">
             <div class="card-body p-3 {{ job.status|lower }}">
               <h6 class="card-title">{{ job.driver.firstname }} {{ job.driver.lastname }}</h6>
               <p class="card-text">{{ job.driver.role }}</p>
@@ -144,7 +341,7 @@
       </div>
     </div>
   </div>
-</div>
+</div>-->
 
 {% else %}
 <p>You are not logged in</p>
