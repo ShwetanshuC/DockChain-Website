@@ -61,7 +61,7 @@ def is_trucking_company(user):
 def generate_random_password():
     return secrets.token_urlsafe(16)  # Generates a secure random password
 
-@csrf_exempt
+'''@csrf_exempt
 # @require_http_methods(["GET", "POST"])
 def arduino_endpoint(request):
     print(f"Method: {request.method}")
@@ -137,7 +137,8 @@ def arduino_endpoint(request):
         return HttpResponse("OK")
     except Job.DoesNotExist:
         return HttpResponse("Not found", status=404)
-    
+
+'''
 @login_required(login_url='/accounts/login/')
 @user_passes_test(is_trucking_company, login_url='/accounts/unauthorized/')
 def truckmanagement(request): 
