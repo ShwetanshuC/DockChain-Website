@@ -61,7 +61,7 @@ def is_trucking_company(user):
 def generate_random_password():
     return secrets.token_urlsafe(16)  # Generates a secure random password
 
-# @csrf_exempt
+@csrf_exempt
 # @require_http_methods(["GET", "POST"])
 def arduino_endpoint(request):
     print(f"Method: {request.method}")
@@ -108,7 +108,7 @@ def arduino_endpoint(request):
                 if not job_id:
                     return HttpResponseBadRequest()
                 try:
-                    return HttpResponse(Job.objects.get(job_id=job_id).status)
+                    return HttpResponse(Job.objects.get(id=job_id).status)
                 except Job.DoesNotExist:
                     return HttpResponse("Not found", status=404)
 
@@ -116,7 +116,7 @@ def arduino_endpoint(request):
                 if not job_id:
                     return HttpResponseBadRequest()
                 try:
-                    return HttpResponse(Job.objects.get(job_id=job_id).temp_finger)
+                    return HttpResponse(Job.objects.get(id=job_id).temp_finger)
                 except Job.DoesNotExist:
                     return HttpResponse("Not found", status=404)
 
@@ -131,7 +131,7 @@ def arduino_endpoint(request):
         return HttpResponseBadRequest()
 
     try:
-        job = Job.objects.get(job_id=job_id)
+        job = Job.objects.get(id=job_id)
         setattr(job, field, value)  # Assume valid field; fail loudly if not
         job.save()
         return HttpResponse("OK")

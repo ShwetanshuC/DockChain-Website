@@ -27,14 +27,15 @@ class Job(models.Model):
     driver_applications = models.ManyToManyField(trucker, related_name='applied_jobs', blank=True)  # for tracking applications from registered independent truckers
     license_plate = models.ForeignKey(LicensePlate, null=True, on_delete=models.CASCADE, default=None)
     state_locale = models.CharField(max_length=100, default='Unknown')  # for independent truckers
-    port_location = models.CharField(max_length=50, default='Unknown')
+    port_location = models.CharField(max_length=1000, default='Unknown')
     job_type = models.CharField(choices=[('HYBRID', 'Hybrid'), ('PICKUP', 'Pickup'), ('DELIVERY', 'Delivery')], default='PICKUP', max_length=10)
-    cargo_id = models.CharField(max_length=50, default='Unknown')
-    description = models.TextField(max_length=30, blank=True, default='Unknown')
+    cargo_id = models.CharField(max_length=1000, default='Unknown')
+    description = models.TextField(max_length=1000, blank=True, default='Unknown')
     organization = models.CharField(max_length=100, default='Unknown')
     docking_location = models.CharField(max_length=100, default='Unknown')
     forSignUp = models.BooleanField(default=False)  # for cargo broker sign-up purposes
-    status = models.CharField(max_length=10, default='Pending')  # e.g., Pending, Approved, Denied, InProgress, SecurityCleared, CargoPickedUp, Completed
+    status = models.CharField(max_length=1000, default='Pending')  # e.g., Pending, Approved, Denied, InProgress, SecurityCleared, CargoPickedUp, Completed
+    temp_finger = models.CharField(max_length=1000, default='Pending')
     timestamp = models.DateTimeField(auto_now_add=True)  # store when the job was started
     approval_timestamp = models.DateTimeField(null=True)  # store when the job was approved
     target_timestamp = models.DateTimeField(null=True)  # store when the job is expected to be completed

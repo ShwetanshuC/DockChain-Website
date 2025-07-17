@@ -159,7 +159,7 @@ Pre-demo setup:
     Install conda (loook at EasyOCR_test.py for directions)
     Start webserver if not already done
     Clear database and create (with interface):
-    - 3 regular cargo companies titled East Coast Shipping
+    - 3 regular cargo companies, one titled East Coast Shipping
         - 3 truckers employed by ECS, one of them titled Jamie
         - 5+ license plates owned by ECS...
             one of them with a state of Texas and a plate number CH9L960 

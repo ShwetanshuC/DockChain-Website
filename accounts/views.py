@@ -66,10 +66,7 @@ class TruckCompanySignUpView(CreateView):
 
     def form_valid(self, form):
         print(form)
-        user = form.save(commit=False)
-        password = form.cleaned_data.get('password')
-        user.set_password(password)
-        user.save()
+        user = form.save()
 
         group = Group.objects.get(name="Trucking Company")
         user.groups.add(group)
@@ -83,11 +80,7 @@ class PortSignUpView(CreateView):
     def get_success_url(self):
         return "/portinterface/"
     def form_valid(self, form):
-        user = form.save(commit=False)
-        password = form.cleaned_data.get('password')
-        user.set_password(password)
-        user.save()
-        
+        user = form.save()
         group = Group.objects.get(name="Port")
         user.groups.add(group)
         login(self.request, user)
@@ -113,12 +106,7 @@ class TruckDriverSignUpView(CreateView):
         state = form.cleaned_data.get('state')
         truck_license = form.cleaned_data.get('truck_license')
         LicensePlate.objects.create(state=state, plate_number=truck_license, organization=organization)
-        user = form.save(commit=False)
-        password = form.cleaned_data.get('password')
-        user.set_password(password)
-
-        user.organization = organization
-        user.save()
+        user = form.save()
         group = Group.objects.get(name="Driver")
         user.groups.add(group)
         login(self.request, user)
