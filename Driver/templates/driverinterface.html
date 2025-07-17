@@ -8,7 +8,7 @@
 
 {% if user.is_authenticated %}
 
-<h1>Welcome {{ user.first_name }}</h1>
+<h1 style="padding-top: 1rem">Welcome {{ user.first_name }}</h1>
 
 <div class="job-actions-wrapper">
   <div class="container text-center">
@@ -146,7 +146,7 @@
             </div>
           </div>
         {% empty %}
-          <p class="text-muted text-center">No available independent jobs at this time.</p>
+          <p class="text-muted text-center" style="color: whitesmoke !important">No available independent jobs at this time.</p>
         {% endfor %}
       </div>
     </div>

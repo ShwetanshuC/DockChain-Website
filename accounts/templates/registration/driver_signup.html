@@ -1,36 +1,20 @@
 {% extends "signupbase.html" %}
-
+{% load static %}
 {% block title %}Sign Up{% endblock %}
 
 {% block signup_content %}
-
-<h2>Sign up</h2>
-<form method="post">
-  <div class="form_style">
-    {% csrf_token %}
-    <div class="mb-1">
-      <input type="text" name="email" class="form-control form-control-sm" required>
-    </div>
-    <div class="mb-1">
-      <input type="text" name="password" class="form-control form-control-sm" required>
-    </div>
-    <div class="mb-1">
-      <input type="text" name="first_name" class="form-control form-control-sm" required>
-    </div>
-    <div class="mb-1">
-      <input type="text" name="last_name" class="form-control form-control-sm" required>
-    </div>
-     <div class="mb-1">
-      <input type="text" name="qualifications" class="form-control form-control-sm" required>
-    </div>
-     <div class="mb-1">
-      <input type="text" name="state" class="form-control form-control-sm" required>
-    </div>
-     <div class="mb-1">
-      <input type="text" name="truck_license" class="form-control form-control-sm" required>
-    </div>
-    <!--{{ form }}-->
-    <button class="form_style btn btn-primary btn-lg" type="submit">Sign Up</button>
+<body>
+  <div class="banner-container position-relative text-center text-white py-5 d-flex flex-column justify-content-center align-items-center" style="padding: 8rem 1rem; max-height: 200px;">
+    <h2 class="registration-title">Sign Up</h2>
+    <p class="fs-4 mt-3 mb-0 text-white">Enter your information below.</p>
   </div>
-</form>
+
+  <form method="POST">
+    <div class="form_style">
+      {% csrf_token %}
+      {{ form }}
+      <button class="form_style btn btn-primary btn-lg" type="submit">Sign Up</button>
+    </div>
+  </form>
+</body>
 {% endblock %}
