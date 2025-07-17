@@ -1,9 +1,10 @@
+// THIS CODE SHOULD CONNECT TO COM9
+
 #include <Adafruit_Fingerprint.h>
 #include <SoftwareSerial.h>
 #include <ArduinoJson.h>
 #include <Servo.h>
 #include <WiFiS3.h>
-
 #include "fingerprintFunctions.h"
 
 #include <vector>
@@ -158,6 +159,8 @@ void setup() {
     // wait 10 seconds for connection:
     delay(10000);
   }
+
+  //client.setCACert(test_root_ca);
   //printWifiStatus();
   //testConnection();
 }
@@ -208,7 +211,7 @@ void loop() {
 
   if (currentJob == -1) {
     Serial.println("Plate not found!");
-    while (true) {}
+    return;
   }
 
   // checking capacity of fingerprint sensor
@@ -236,11 +239,14 @@ void loop() {
 
   // light up led - you can add error detection later
   for(int y=0;y<3;y++) {
-    setColor("green");
-    delay(500);
+    setColor("red");
+    delay(200);
     setColor("none");
-    delay(500);
+    delay(200);
   }
+
+  myServo.write(90);
+  delay(12000);
   String check;
   while (true) {
     // checking if cargo cleared signal has been sent
@@ -284,10 +290,10 @@ void loop() {
 
   if (results == commerror) {
     sendError("Communication error upon comparing fingerprints!");
-    while (true) {}
+    return;
   } else if (results == notfound) {
     sendError("Exit fingerprint not found within database!");
-    while (true) {}
+    return;
   } else {
     // if confidence score is less than some threshhold, do not continue (have function for this)
     Serial.println("Results: " + String(results[0]) + ", " + String(results[1]) + ", " + String(results[2]));
@@ -298,7 +304,7 @@ void loop() {
 
     // light up led
 
-    setColor("green");
+    setColor("red");
 
     delay(1000);
 
@@ -349,7 +355,7 @@ String getData(String path) {
     // Wait for response
     unsigned long timeout = millis();
     while (client.available() == 0) {
-      if (millis() - timeout > 5000) {
+      if (millis() - timeout > 20000) {
         Serial.println("Client timeout!");
         client.stop();
         return "TIMEOUT";
@@ -402,7 +408,7 @@ String sendData(int job_id, String column, String message) {
     // Wait for response
     unsigned long timeout = millis();
     while (client.available() == 0) {
-      if (millis() - timeout > 5000) {
+      if (millis() - timeout > 20000) {
         Serial.println("Client timeout!");
         client.stop();
         return "TIMEOUT";
@@ -499,7 +505,7 @@ void testConnection() {
     // Wait for response
     unsigned long timeout = millis();
     while (client.available() == 0) {
-      if (millis() - timeout > 5000) {
+      if (millis() - timeout > 20000) {
         Serial.println("Client timeout!");
         client.stop();
         return;
