@@ -1,4 +1,4 @@
-
+// THIS CODE SHOULD CONNECT TO COM7
 
 // side note: lcd.print is (column, row)
 
@@ -50,10 +50,8 @@ std::vector<std::vector<String>> startedJobIDs = {};
 #include <Wire.h>
 #include <DHT22.h>
 #include <vector>
-
-#include <R4HttpClient.h>
-
-#include "ThingSpeak.h"  // always include thingspeak header file after other header files and custom macros
+#include <ArduinoJson.h>
+#include <WiFiS3.h>
 
 #define HOST "localhost"
 #define WIFI_SSID "DESKTOP-QH1UG56 5470" // "Leon's iPhone"
@@ -64,13 +62,38 @@ JsonDocument driverDoc;
 JsonDocument licenseDoc;
 
 int status = WL_IDLE_STATUS;
-WiFiSSLClient client;
-R4HttpClient http;
+WiFiClient client;
 
-char server[] = "127.0.0.1";
+String server = "192.168.137.1";
+int port = 8000; 
 
+const char* test_root_ca = R"EOF(
+-----BEGIN CERTIFICATE-----
+MIIDozCCAymgAwIBAgISBVc1CJrQJrkjXzay+EeaJvFdMAoGCCqGSM49BAMDMDIx
+CzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQDEwJF
+NTAeFw0yNTA3MTcxMzIxMDVaFw0yNTEwMTUxMzIxMDRaMCYxJDAiBgNVBAMTG3Nv
+dXRoZXJucGFya211c2ljc2Nob29sLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEH
+A0IABKAmIHyymh/dB6B8RkvxgzDVdJHR/LK953dRX2ac1zbjpCUB/yfWbyTAk//u
+WzWY7Ye16x1tTwzYeUlIG7t6UFWjggIpMIICJTAOBgNVHQ8BAf8EBAMCB4AwHQYD
+VR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMAwGA1UdEwEB/wQCMAAwHQYDVR0O
+BBYEFGgKkhPRZKiOd6QDDUnUwiY3bpXcMB8GA1UdIwQYMBaAFJ8rX888IU+dBLft
+KyzExnCL0tcNMDIGCCsGAQUFBwEBBCYwJDAiBggrBgEFBQcwAoYWaHR0cDovL2U1
+LmkubGVuY3Iub3JnLzAmBgNVHREEHzAdghtzb3V0aGVybnBhcmttdXNpY3NjaG9v
+bC5jb20wEwYDVR0gBAwwCjAIBgZngQwBAgEwLQYDVR0fBCYwJDAioCCgHoYcaHR0
+cDovL2U1LmMubGVuY3Iub3JnLzk0LmNybDCCAQQGCisGAQQB1nkCBAIEgfUEgfIA
+8AB2AN3cyjSV1+EWBeeVMvrHn/g9HFDf2wA6FBJ2Ciysu8gqAAABmBjBRa0AAAQD
+AEcwRQIgUr1SzEJfSXs02ZrTS0w5g8BRAaM6j3H7rtNneg/MIxUCIQDXzvaJsnZT
+rZXoelInMlfnlVjKJJr9bXAy245arw4EVAB2AO08S9boBsKkogBX28sk4jgB31Ev
+7cSGxXAPIN23Pj/gAAABmBjBTToAAAQDAEcwRQIhAKZfwWvlPignINL16ZQ9boqm
+5kXVw1vt6cAORrFdt+A+AiApDmcvwSJQ+E641YtZh0t9EDSbPL7irW9hN12fhiMJ
+kzAKBggqhkjOPQQDAwNoADBlAjEAuleKTwT9wf+F1QMMheHFctst6opZ7jmfOzIC
+8BnLtDAaMbAqxCNjUc36A0kcngg+AjBrsADDSimKviidV1N7yMS1IT4Pm6GVnJ75
+ajID4gLnx2IFC4+3jGxCfrWpI+0Kt98=
+-----END CERTIFICATE-----
+)EOF";
 // sorting of database will be done by Shwet's python code
 // std::vector<std::vector<std::vector<String>>
+/*
 String jobs[3][6][4] = {
   { { "Jobless", "Shwetanshu", "Goon", "07/08/25" },
     { "North Carolina", "2W96", "07/08/25", "" },
@@ -90,13 +113,14 @@ String jobs[3][6][4] = {
     { "", "", "", "" },
     { "inactive", "", "", "" },
     { "8", "", "", "" } }
-};
+};*/
 
+int buttonPin = 2;
+
+std::vector<String> findPlate(JsonObject plate_id);
 
 // init LCD with interface pins
 LiquidCrystal_I2C lcd(0x27, 16, 2);
-
-int buttonPin = 2;
 
 void setup() {
   Serial.begin(9600);
@@ -136,35 +160,29 @@ void setup() {
     // wait 10 seconds for connection:
     delay(10000);
   }
-  printWifiStatus();
+  Serial.println("Connected!");
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Preparing jobs..");
+  //printWifiStatus();
+
+  //client.setCACert(test_root_ca);
 }
 
 void loop() {
-
-  String server = "192.168.137.1";
-  int port = 8000;
   // request all job info
 
   String startedJobs = getData("value=securedJobs");
-  
+  Serial.println("String for jobs:" + startedJobs);
   DeserializationError error = deserializeJson(jobDoc, startedJobs);
-  if (error) {
-    Serial.println("Error when deserializing JSON and writing to doc: " + String(error))
-  }
 
-  drivers = getData("value=drivers");
-  
-  DeserializationError error = deserializeJson(driverDoc, drivers);
-  if (error) {
-    Serial.println("Error when deserializing JSON and writing to doc: " + String(error))
-  }
-  
-  plates = getData("value=plates_all");
-  
-  DeserializationError error = deserializeJson(licenseDoc, plates);
-  if (error) {
-    Serial.println("Error when deserializing JSON and writing to doc: " + String(error))
-  }
+  String drivers = getData("value=drivers");
+  Serial.println("String for drivers: " + drivers);
+  error = deserializeJson(driverDoc, drivers);
+
+  String plates = getData("value=plates_all");
+  Serial.println("String for plates: " + plates);
+  error = deserializeJson(licenseDoc, plates);
   
   delay(1000);
   lcd.clear();
@@ -189,7 +207,7 @@ void loop() {
     lcd.setCursor(0, 1);
     lcd.print("Data");
                         // this should be doc reference
-    String driverString = findDriver(jobDoc[i]["driver_id"])
+    String driverString = findDriver(jobDoc[i]["driver_id"]);
     if (driverString.length() > 16) {
       driverString = driverString.substring(0, 15) + ".";
     }
@@ -207,7 +225,7 @@ void loop() {
     lcd.setCursor(0, 1);
     lcd.print("and number:");
 
-    String plateString[] = findPlate(jobDoc[i]["license_plate_id"])
+    std::vector<String> plateString = findPlate(jobDoc[i]["license_plate_id"]);
 
     delay(1200);
     lcd.clear();
@@ -221,7 +239,7 @@ void loop() {
     lcd.setCursor(0, 0);
     lcd.print("Cargo location:");
     lcd.setCursor(0, 1); // this should be doc reference
-    lcd.print(jobDoc[i]["docking_location"]);
+    lcd.print(String(jobDoc[i]["docking_location"]));
 
     delay(1200);
     lcd.clear();
@@ -262,7 +280,7 @@ void loop() {
 
     if (buttonState == HIGH) {
       Serial.println("Success!");          // this should be job doc
-      result = sendData(String(jobDoc[0]["id"]), "status", "CargoPickedUp");
+      String result = sendData(int(jobDoc[0]["id"]), "status", "CargoPickedUp");
       //jobs[startedJobs[0]][4][0] = "cargoPickedUp";
       lcd.clear();
       lcd.setCursor(0, 0);
@@ -296,8 +314,7 @@ String getData(String path) {
   if (client.connect(server.c_str(), port)) {
     // Send HTTP request
     client.println("GET " + urlWithData + " HTTP/1.1");
-    client.println("Host: " + server + ":" + String(port));
-    //client.println("User-Agent: Arduino/1.0");
+    client.println("Host: " + server + ":" + String(port));//client.println("User-Agent: Arduino/1.0");
     client.println("Connection: close");
     client.println();
     
@@ -357,7 +374,7 @@ String sendData(int job_id, String column, String message) {
     // Wait for response
     unsigned long timeout = millis();
     while (client.available() == 0) {
-      if (millis() - timeout > 5000) {
+      if (millis() - timeout > 20000) {
         Serial.println("Client timeout!");
         client.stop();
         return "TIMEOUT";
@@ -390,19 +407,23 @@ String sendData(int job_id, String column, String message) {
 
 String findDriver(int driver_id) {
   for (int i=0;i<driverDoc.size();i++) {
-    if (driverDoc[i]["id"] == job_id) {
-      return driverDoc[i]["firstname"] + " " + driverDoc[i]["lastname"];
+    if (driverDoc[i]["id"] == driver_id) {
+      return String(driverDoc[i]["firstname"]) + " " + String(driverDoc[i]["lastname"]);
     }
   }
   return "";
 }
 
 
-String[] findPlate(int plate_id) {
-  for (int i=0;i<plateDoc.size();i++) {
-    if (plateDoc[i]["id"] == plate_id) {
-      return [plateDoc[i]["state"], plateDoc[i]["plate_number"]];
+std::vector<String> findPlate(JsonObject plate_id) {
+  std::vector<String> empt = {"", ""};
+  for (int i=0;i<licenseDoc.size();i++) {
+    if (licenseDoc[i]["id"] == plate_id) {
+      String state = String(licenseDoc[i]["state"]);
+      String numb = String(licenseDoc[i]["plate_number"]);
+      std::vector<String> ret = {state, numb};
+      return ret;
     }
   }
-  return "";
+  return empt;
 }
