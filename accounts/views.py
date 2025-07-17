@@ -11,45 +11,17 @@ from truckmanagement.models import trucker
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
+from django.db.models import Q
+from django.contrib.auth.models import Group
+from django.contrib.auth import login
+from truckmanagement.models import trucker
+
 '''
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/truck_company_signup.html"
 '''
-
-# Distinct sign up views for each user role
-class TruckDriverSignUpView(CreateView):
-    form_class = CustomUserCreationForm
-    template_name = "registration/driver_signup.html"
-
-    def get_success_url(self):
-        return "/driverinterface/"
-
-    def form_valid(self, form):
-        firstname = form.cleaned_data.get('first_name')
-        lastname = form.cleaned_data.get('last_name')
-        qualifications = form.cleaned_data.get('qualifications')
-        role = "Independent Driver"
-        organization = "Independent"
-        truck_license = form.cleaned_data.get('truck_license')
-        state = form.cleaned_data.get('state')
-        trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization, qualifications=qualifications, truck_license=truck_license, state=state)
-        state = form.cleaned_data.get('state')
-        truck_license = form.cleaned_data.get('truck_license')
-        LicensePlate.objects.create(state=state, plate_number=truck_license, organization=organization)
-        user = form.save()
-        user.organization = organization
-        user.save()
-        group = Group.objects.get(name="Driver")
-        user.groups.add(group)
-        login(self.request, user)
-        return HttpResponseRedirect(self.get_success_url())
-
-from django.db.models import Q
-from django.contrib.auth.models import Group
-from django.contrib.auth import login
-from truckmanagement.models import trucker
 
 def search_truckers(request):
     query = request.GET.get("q")
@@ -84,7 +56,6 @@ def search_license_plates(request):
         "form": form
     })
 
-
 # Trucking Company Sign Up View
 class TruckCompanySignUpView(CreateView):
     form_class = CompanyUserCreationForm
@@ -94,12 +65,19 @@ class TruckCompanySignUpView(CreateView):
         return "/truckmanagement/"
 
     def form_valid(self, form):
-        user = form.save()
+        print(form)
+        user = form.save(commit=False)
+        password = form.cleaned_data.get('password')
+        user.set_password(password)
+        user.save()
+
         group = Group.objects.get(name="Trucking Company")
         user.groups.add(group)
         login(self.request, user)
         return HttpResponseRedirect(self.get_success_url())
     
+    def form_invalid(self, form):
+        print(form)
 
 # Port Operator Sign Up View
 class PortSignUpView(CreateView):
@@ -108,12 +86,47 @@ class PortSignUpView(CreateView):
     def get_success_url(self):
         return "/portinterface/"
     def form_valid(self, form):
-        user = form.save()
+        user = form.save(commit=False)
+        password = form.cleaned_data.get('password')
+        user.set_password(password)
+        user.save()
+        
         group = Group.objects.get(name="Port")
         user.groups.add(group)
         login(self.request, user)
         return HttpResponseRedirect(self.get_success_url())
-    
+
+# Distinct sign up views for each user role
+class TruckDriverSignUpView(CreateView):
+    form_class = CustomUserCreationForm
+    template_name = "registration/driver_signup.html"
+
+    def get_success_url(self):
+        return "/driverinterface/"
+
+    def form_valid(self, form):
+        firstname = form.cleaned_data.get('first_name')
+        lastname = form.cleaned_data.get('last_name')
+        qualifications = form.cleaned_data.get('qualifications')
+        role = "Independent Driver"
+        organization = "Independent"
+        truck_license = form.cleaned_data.get('truck_license')
+        state = form.cleaned_data.get('state')
+        trucker.objects.create(firstname=firstname, lastname=lastname, role=role, organization=organization, qualifications=qualifications, truck_license=truck_license, state=state)
+        state = form.cleaned_data.get('state')
+        truck_license = form.cleaned_data.get('truck_license')
+        LicensePlate.objects.create(state=state, plate_number=truck_license, organization=organization)
+        user = form.save(commit=False)
+        password = form.cleaned_data.get('password')
+        user.set_password(password)
+
+        user.organization = organization
+        user.save()
+        group = Group.objects.get(name="Driver")
+        user.groups.add(group)
+        login(self.request, user)
+        return HttpResponseRedirect(self.get_success_url())
+
 def unauthorized_view(request):
     return render(request, "unauthorized.html", {"next": request.GET.get("next", "/")})
 

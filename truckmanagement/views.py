@@ -219,9 +219,14 @@ def new_trucker(request, user_id, new_password):
 def delete_trucker(request, id):
     if request.method == 'POST':
         trucker_to_delete = get_object_or_404(trucker, id=id)
-        user_to_delete = get_object_or_404(User, first_name=trucker_to_delete.firstname.lower(), last_name=trucker_to_delete.lastname.lower())
+        user_to_delete = None
+        try:
+            user_to_delete = get_object_or_404(User, first_name=trucker_to_delete.firstname.lower(), last_name=trucker_to_delete.lastname.lower())
+        except Exception as e:
+            print("no user")
         trucker_to_delete.delete()
-        user_to_delete.delete()
+        if (user_to_delete != None):
+            user_to_delete.delete()
     return redirect('driverdirectory')
 
 def delete_job(request, id):
