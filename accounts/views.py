@@ -75,9 +75,6 @@ class TruckCompanySignUpView(CreateView):
         user.groups.add(group)
         login(self.request, user)
         return HttpResponseRedirect(self.get_success_url())
-    
-    def form_invalid(self, form):
-        print(form)
 
 # Port Operator Sign Up View
 class PortSignUpView(CreateView):
