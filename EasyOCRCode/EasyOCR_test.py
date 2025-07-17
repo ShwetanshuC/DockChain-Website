@@ -4,6 +4,20 @@ you need to use pip to install all the libraries you're going to use.
 Using the default vscode prompt won't do anything, and will show as if the modules are not recognized. 
 In some cases, you need to tweak the base path of the terminal so that python can be found.
 
+- install conda
+- open conda terminal
+- cd to website folder
+- accept terms of service
+- create virtual environment using "conda create --name [DESIRED NAME OF ENVIRONMENT] python=3.11"
+- "conda install pip"
+- install dependencies ("pip install [PACKAGE]"):
+    mysql
+    mysql-connector-python
+    django
+    easyocr
+    openai
+- activate venv: "conda activate [DESIRED NAME OF ENVIRONMENT]"
+- run webserver: python manage.py runserver
 '''
 
 
@@ -66,7 +80,7 @@ def folder_scan(folderPath: str) -> str:
             ocr_scan(file_path)
             '''
 
-    print(listOfPlateNumbers)
+    return listOfPlateNumbers
 
 #print("Here is the extracted text:", ocr_scan(image_path))
 
@@ -166,9 +180,9 @@ is_plate_registered("7ADBF3")
 
 '''
 
-folder_path = r"C:\Users\ashok\Downloads\licenseimages"
+#folder_path = r"C:\Users\ashok\Downloads\licenseimages"
 
-folder_scan(folder_path)
+#folder_scan(folder_path)
 
 
 

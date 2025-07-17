@@ -12,8 +12,12 @@ from django.contrib.auth import login
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from EasyOCRCode import EasyOCR_test
 
 import secrets
+
+# defines mode of operation for demo: valid and invalid
+demoMode = True
 
 def trucker_list(request):
     truckers = trucker.objects.all().order_by('-date_posted')
@@ -57,8 +61,6 @@ def is_trucking_company(user):
 def generate_random_password():
     return secrets.token_urlsafe(16)  # Generates a secure random password
 
-
-TEST_PLATES = ["EGF6647", "ABC1234", "Tech", "QRS2345", "TUV6789"]
 # @csrf_exempt
 # @require_http_methods(["GET", "POST"])
 def arduino_endpoint(request):
@@ -76,19 +78,27 @@ def arduino_endpoint(request):
                 jobs = Job.objects.filter(status="InProgress").values()
                 return JsonResponse(list(jobs), safe=False)
             
-            case "secured_jobs":
+            case "securedJobs":
                 jobs = Job.objects.filter(status="SecurityCleared").values()
                 return JsonResponse(list(jobs), safe=False)
             
             case "plate_initial":
-                return JsonResponse({"plate": TEST_PLATES[0]})
+                if demoMode:
+                    return_plate = (EasyOCR_test.folder_scan("./plates_for_ocr/ValidPlate_Initial"))[0]
+                else:
+                    return_plate = (EasyOCR_test.folder_scan("./plates_for_ocr/InvalidPlate_Initial"))[0]
+                return JsonResponse({"plate": return_plate})
             
             case "plates_all":
                 plates = LicensePlate.objects.all().values()
                 return JsonResponse(list(plates), safe=False)
 
             case "plate_final":
-                return JsonResponse({"plate": TEST_PLATES[1]})
+                if demoMode:
+                    return_plate = (EasyOCR_test.folder_scan("./plates_for_ocr/ValidPlate_Final"))[0]
+                else:
+                    return_plate = (EasyOCR_test.folder_scan("./plates_for_ocr/InvalidPlate_Final"))[0]
+                return JsonResponse({"plate": return_plate})
             
             case "drivers":
                 drivers = trucker.objects.all().values()

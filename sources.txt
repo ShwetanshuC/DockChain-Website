@@ -153,4 +153,57 @@ Job is put out
 Sign up
 
 
+7/17 Demo steps
 
+Pre-demo setup:
+    Install conda (loook at EasyOCR_test.py for directions)
+    Start webserver if not already done
+    Clear database and create (with interface):
+    - 3 regular cargo companies titled East Coast Shipping
+        - 3 truckers employed by ECS, one of them titled Jamie
+        - 5+ license plates owned by ECS...
+            one of them with a state of Texas and a plate number CH9L960 
+            one of them with a state of Kansas and a plate number 626LRP
+    - 2 cargo broker companies, one titled Odds And Ends Shipping
+    - 4 individual truckers, one named Remy, with valid form responses (i.e no gibberish in the form fields)
+        - Remy's license plate should be from Pennsylvania with plate number ABC123
+    - 5 ports, one titled Wrightsville Port
+    Copy "lcd_basic" and "full_circuit" scripts onto scripts located on your computer
+    Replace "server" variable in both scripts with new URL, and "port" variable with whatever port the cloud is listening on
+    Plug both Arduinos into target computer (i.e. Shwet's).
+        Designate lcd_basic as COM7 and full_circuit as COM9
+        Initalize both Arduinos by uploading code
+
+Start job from East Coast Shipping, for a nearby time (i.e. 4 mins from intialization time)
+- Target Wrightsville Port
+- Assign job to Jamie
+- Assign license plate of CH9L960
+- Approve job from Wrightsville Port Interface
+- Start job from Jamie interface (explain that she is 2 minutes, or however much time is remaining until target time, away from Wrightsville Port)
+- Move car or truck onto track 
+- Scan fingerprint scanner
+- Wait for server operations to finish
+- Move vehicle through gate
+- Wait for LCD to start new loop
+- Move cargo into truck
+- Press pushbutton when prompted to update job status
+- Move car back towards exit gate 
+- Scan fingerprint
+- Move car out of sim
+
+Start job from Odds and Ends Shipping
+- Target Wrightsville Port
+- Login as Remy and apply to job
+- Log back in as Odds & Ends and approve appli1cation, assigning times in a 5 min radius
+- Approve job from Wrightsville Port Interface
+- Start job from Remy interface (explain that she is 2 minutes, or however much time is remaining until target time, away from Wrightsville Port)
+- Move car or truck onto track 
+- Scan fingerprint scanner
+- Wait for server operations to finish
+- Move vehicle through gate
+- Wait for LCD to start new loop
+- Move cargo into truck
+- Press pushbutton when prompted to update job status
+- Move car back towards exit gate 
+- Scan fingerprint
+- Highlight failure of operation

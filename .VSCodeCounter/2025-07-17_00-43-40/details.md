@@ -1,0 +1,136 @@
+# Details
+
+Date : 2025-07-17 00:43:40
+
+Directory c:\\Users\\leon0\\Desktop\\development\\DockChain-Website-1
+
+Total : 121 files,  4302 codes, 718 comments, 962 blanks, all 5982 lines
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
+
+## Files
+| filename | language | code | comment | blank | total |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| [DockChain/\_\_init\_\_.py](/DockChain/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [DockChain/asgi.py](/DockChain/asgi.py) | Python | 4 | 8 | 5 | 17 |
+| [DockChain/settings.py](/DockChain/settings.py) | Python | 86 | 27 | 37 | 150 |
+| [DockChain/urls.py](/DockChain/urls.py) | Python | 11 | 16 | 2 | 29 |
+| [DockChain/wsgi.py](/DockChain/wsgi.py) | Python | 4 | 8 | 5 | 17 |
+| [Driver/\_\_init\_\_.py](/Driver/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [Driver/admin.py](/Driver/admin.py) | Python | 1 | 1 | 2 | 4 |
+| [Driver/apps.py](/Driver/apps.py) | Python | 4 | 0 | 3 | 7 |
+| [Driver/migrations/\_\_init\_\_.py](/Driver/migrations/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [Driver/models.py](/Driver/models.py) | Python | 1 | 1 | 2 | 4 |
+| [Driver/templates/driverinterface.html](/Driver/templates/driverinterface.html) | HTML | 147 | 8 | 7 | 162 |
+| [Driver/tests.py](/Driver/tests.py) | Python | 1 | 1 | 2 | 4 |
+| [Driver/urls.py](/Driver/urls.py) | Python | 7 | 0 | 1 | 8 |
+| [Driver/views.py](/Driver/views.py) | Python | 49 | 0 | 6 | 55 |
+| [EasyOCRCode/EasyOCR\_test.py](/EasyOCRCode/EasyOCR_test.py) | Python | 61 | 88 | 28 | 177 |
+| [Port/\_\_init\_\_.py](/Port/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [Port/admin.py](/Port/admin.py) | Python | 1 | 1 | 2 | 4 |
+| [Port/apps.py](/Port/apps.py) | Python | 4 | 0 | 3 | 7 |
+| [Port/migrations/\_\_init\_\_.py](/Port/migrations/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [Port/models.py](/Port/models.py) | Python | 1 | 1 | 2 | 4 |
+| [Port/templates/portinterface.html](/Port/templates/portinterface.html) | HTML | 193 | 149 | 7 | 349 |
+| [Port/tests.py](/Port/tests.py) | Python | 1 | 1 | 2 | 4 |
+| [Port/urls.py](/Port/urls.py) | Python | 8 | 0 | 1 | 9 |
+| [Port/views.py](/Port/views.py) | Python | 49 | 4 | 13 | 66 |
+| [accounts/Email2FA.py](/accounts/Email2FA.py) | Python | 29 | 1 | 4 | 34 |
+| [accounts/PasswordChange2FA.py](/accounts/PasswordChange2FA.py) | Python | 21 | 18 | 3 | 42 |
+| [accounts/\_\_init\_\_.py](/accounts/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [accounts/admin.py](/accounts/admin.py) | Python | 3 | 0 | 1 | 4 |
+| [accounts/apps.py](/accounts/apps.py) | Python | 4 | 0 | 3 | 7 |
+| [accounts/context\_processors.py](/accounts/context_processors.py) | Python | 57 | 1 | 8 | 66 |
+| [accounts/forms.py](/accounts/forms.py) | Python | 16 | 1 | 4 | 21 |
+| [accounts/migrations/0001\_initial.py](/accounts/migrations/0001_initial.py) | Python | 33 | 1 | 7 | 41 |
+| [accounts/migrations/0002\_user\_port\_location.py](/accounts/migrations/0002_user_port_location.py) | Python | 12 | 1 | 6 | 19 |
+| [accounts/migrations/0003\_remove\_user\_name\_user\_first\_name\_user\_last\_name\_and\_more.py](/accounts/migrations/0003_remove_user_name_user_first_name_user_last_name_and_more.py) | Python | 31 | 1 | 6 | 38 |
+| [accounts/migrations/0004\_user\_name.py](/accounts/migrations/0004_user_name.py) | Python | 12 | 1 | 6 | 19 |
+| [accounts/migrations/0005\_user\_iscargobroker\_user\_qualifications\_user\_services.py](/accounts/migrations/0005_user_iscargobroker_user_qualifications_user_services.py) | Python | 22 | 1 | 6 | 29 |
+| [accounts/migrations/0006\_alter\_user\_qualifications.py](/accounts/migrations/0006_alter_user_qualifications.py) | Python | 12 | 1 | 6 | 19 |
+| [accounts/migrations/0006\_rename\_iscargobroker\_user\_is\_cargo\_broker\_and\_more.py](/accounts/migrations/0006_rename_iscargobroker_user_is_cargo_broker_and_more.py) | Python | 22 | 1 | 6 | 29 |
+| [accounts/migrations/0007\_user\_state\_user\_truck\_license.py](/accounts/migrations/0007_user_state_user_truck_license.py) | Python | 17 | 1 | 6 | 24 |
+| [accounts/migrations/0008\_merge\_20250715\_1032.py](/accounts/migrations/0008_merge_20250715_1032.py) | Python | 8 | 1 | 6 | 15 |
+| [accounts/migrations/\_\_init\_\_.py](/accounts/migrations/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [accounts/models.py](/accounts/models.py) | Python | 48 | 0 | 17 | 65 |
+| [accounts/templates/base.html](/accounts/templates/base.html) | HTML | 151 | 12 | 13 | 176 |
+| [accounts/templates/change-password.html](/accounts/templates/change-password.html) | HTML | 0 | 0 | 1 | 1 |
+| [accounts/templates/driverDocumentation.html](/accounts/templates/driverDocumentation.html) | HTML | 8 | 0 | 7 | 15 |
+| [accounts/templates/enter\_code.html](/accounts/templates/enter_code.html) | HTML | 20 | 1 | 13 | 34 |
+| [accounts/templates/manageprofile.html](/accounts/templates/manageprofile.html) | HTML | 58 | 2 | 8 | 68 |
+| [accounts/templates/portDocumentation.html](/accounts/templates/portDocumentation.html) | HTML | 8 | 0 | 7 | 15 |
+| [accounts/templates/registration/driver\_signup.html](/accounts/templates/registration/driver_signup.html) | HTML | 18 | 0 | 2 | 20 |
+| [accounts/templates/registration/login.html](/accounts/templates/registration/login.html) | HTML | 18 | 0 | 4 | 22 |
+| [accounts/templates/registration/port\_signup.html](/accounts/templates/registration/port_signup.html) | HTML | 18 | 0 | 3 | 21 |
+| [accounts/templates/registration/truck\_company\_signup.html](/accounts/templates/registration/truck_company_signup.html) | HTML | 18 | 0 | 2 | 20 |
+| [accounts/templates/search\_results.html](/accounts/templates/search_results.html) | HTML | 18 | 0 | 2 | 20 |
+| [accounts/templates/signupbase.html](/accounts/templates/signupbase.html) | HTML | 8 | 0 | 4 | 12 |
+| [accounts/templates/truckCompanyDocumentation.html](/accounts/templates/truckCompanyDocumentation.html) | HTML | 8 | 0 | 7 | 15 |
+| [accounts/templates/unauthorized.html](/accounts/templates/unauthorized.html) | HTML | 26 | 0 | 6 | 32 |
+| [accounts/tests.py](/accounts/tests.py) | Python | 1 | 1 | 2 | 4 |
+| [accounts/urls.py](/accounts/urls.py) | Python | 23 | 1 | 2 | 26 |
+| [accounts/views.py](/accounts/views.py) | Python | 185 | 8 | 43 | 236 |
+| [arduino\_code/basic\_lcd.ino](/arduino_code/basic_lcd.ino) | C++ | 273 | 69 | 67 | 409 |
+| [arduino\_code/enroll.ino](/arduino_code/enroll.ino) | C++ | 177 | 27 | 27 | 231 |
+| [arduino\_code/fingerprint.ino](/arduino_code/fingerprint.ino) | C++ | 281 | 70 | 55 | 406 |
+| [arduino\_code/fullcircuit.ino](/arduino_code/fullcircuit.ino) | C++ | 339 | 105 | 108 | 552 |
+| [manage.py](/manage.py) | Python | 15 | 3 | 5 | 23 |
+| [static/Base/script.js](/static/Base/script.js) | JavaScript | 72 | 0 | 11 | 83 |
+| [static/Base/style.css](/static/Base/style.css) | PostCSS | 9 | 0 | 2 | 11 |
+| [static/CompanyTruckerForm/style.css](/static/CompanyTruckerForm/style.css) | PostCSS | 25 | 0 | 6 | 31 |
+| [static/DocumentationPages/driverDocumentation.css](/static/DocumentationPages/driverDocumentation.css) | PostCSS | 4 | 0 | 0 | 4 |
+| [static/DocumentationPages/portDocumentation.css](/static/DocumentationPages/portDocumentation.css) | PostCSS | 4 | 0 | 4 | 8 |
+| [static/DocumentationPages/truckCompanyDocumentation.css](/static/DocumentationPages/truckCompanyDocumentation.css) | PostCSS | 4 | 0 | 2 | 6 |
+| [static/DriverDirectory/script.js](/static/DriverDirectory/script.js) | JavaScript | 22 | 0 | 3 | 25 |
+| [static/DriverDirectory/style.css](/static/DriverDirectory/style.css) | PostCSS | 55 | 2 | 11 | 68 |
+| [static/DriverInterface/style.css](/static/DriverInterface/style.css) | PostCSS | 48 | 0 | 12 | 60 |
+| [static/Foundation/style.css](/static/Foundation/style.css) | PostCSS | 13 | 1 | 1 | 15 |
+| [static/Home/script.js](/static/Home/script.js) | JavaScript | 3 | 1 | 1 | 5 |
+| [static/Home/style.css](/static/Home/style.css) | PostCSS | 69 | 4 | 12 | 85 |
+| [static/Index/style.css](/static/Index/style.css) | PostCSS | 0 | 0 | 1 | 1 |
+| [static/ManageProfile/style.css](/static/ManageProfile/style.css) | PostCSS | 3 | 0 | 0 | 3 |
+| [static/PortInterface/style.css](/static/PortInterface/style.css) | PostCSS | 21 | 0 | 5 | 26 |
+| [static/Registration/style.css](/static/Registration/style.css) | PostCSS | 100 | 4 | 19 | 123 |
+| [static/TruckInterface/style.css](/static/TruckInterface/style.css) | PostCSS | 61 | 5 | 16 | 82 |
+| [static/Unauthorized/style.css](/static/Unauthorized/style.css) | PostCSS | 3 | 0 | 2 | 5 |
+| [truckmanagement/\_\_init\_\_.py](/truckmanagement/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [truckmanagement/admin.py](/truckmanagement/admin.py) | Python | 1 | 1 | 2 | 4 |
+| [truckmanagement/apps.py](/truckmanagement/apps.py) | Python | 4 | 0 | 3 | 7 |
+| [truckmanagement/forms.py](/truckmanagement/forms.py) | Python | 16 | 0 | 4 | 20 |
+| [truckmanagement/migrations/0001\_initial.py](/truckmanagement/migrations/0001_initial.py) | Python | 36 | 1 | 7 | 44 |
+| [truckmanagement/migrations/0002\_job\_approval\_timestamp\_job\_cargo\_id\_job\_description\_and\_more.py](/truckmanagement/migrations/0002_job_approval_timestamp_job_cargo_id_job_description_and_more.py) | Python | 42 | 1 | 6 | 49 |
+| [truckmanagement/migrations/0003\_alter\_job\_job\_type.py](/truckmanagement/migrations/0003_alter_job_job_type.py) | Python | 12 | 1 | 6 | 19 |
+| [truckmanagement/migrations/0004\_alter\_job\_description.py](/truckmanagement/migrations/0004_alter_job_description.py) | Python | 12 | 1 | 6 | 19 |
+| [truckmanagement/migrations/0005\_alter\_job\_description.py](/truckmanagement/migrations/0005_alter_job_description.py) | Python | 12 | 1 | 6 | 19 |
+| [truckmanagement/migrations/0006\_alter\_job\_description.py](/truckmanagement/migrations/0006_alter_job_description.py) | Python | 12 | 1 | 6 | 19 |
+| [truckmanagement/migrations/0007\_job\_completed\_timestamp.py](/truckmanagement/migrations/0007_job_completed_timestamp.py) | Python | 12 | 1 | 6 | 19 |
+| [truckmanagement/migrations/0008\_trucker\_organization.py](/truckmanagement/migrations/0008_trucker_organization.py) | Python | 12 | 1 | 6 | 19 |
+| [truckmanagement/migrations/0009\_trucker\_qualifications.py](/truckmanagement/migrations/0009_trucker_qualifications.py) | Python | 12 | 1 | 6 | 19 |
+| [truckmanagement/migrations/0010\_job\_docking\_location\_job\_driver\_applications\_and\_more.py](/truckmanagement/migrations/0010_job_docking_location_job_driver_applications_and_more.py) | Python | 43 | 1 | 6 | 50 |
+| [truckmanagement/migrations/0011\_alter\_job\_driver\_alter\_job\_license\_plate.py](/truckmanagement/migrations/0011_alter_job_driver_alter_job_license_plate.py) | Python | 18 | 1 | 6 | 25 |
+| [truckmanagement/migrations/0012\_job\_state\_locale.py](/truckmanagement/migrations/0012_job_state_locale.py) | Python | 12 | 1 | 6 | 19 |
+| [truckmanagement/migrations/0013\_licenseplate\_organization.py](/truckmanagement/migrations/0013_licenseplate_organization.py) | Python | 12 | 1 | 6 | 19 |
+| [truckmanagement/migrations/0014\_rename\_independent\_license\_trucker\_truck\_license\_and\_more.py](/truckmanagement/migrations/0014_rename_independent_license_trucker_truck_license_and_more.py) | Python | 17 | 1 | 6 | 24 |
+| [truckmanagement/migrations/\_\_init\_\_.py](/truckmanagement/migrations/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [truckmanagement/models.py](/truckmanagement/models.py) | Python | 38 | 0 | 5 | 43 |
+| [truckmanagement/templates/companytruckerform.html](/truckmanagement/templates/companytruckerform.html) | HTML | 25 | 0 | 4 | 29 |
+| [truckmanagement/templates/driverdirectory.html](/truckmanagement/templates/driverdirectory.html) | HTML | 80 | 6 | 14 | 100 |
+| [truckmanagement/templates/interface1.html](/truckmanagement/templates/interface1.html) | HTML | 198 | 7 | 9 | 214 |
+| [truckmanagement/templates/licenseplates.html](/truckmanagement/templates/licenseplates.html) | HTML | 83 | 3 | 11 | 97 |
+| [truckmanagement/templates/new\_trucker.html](/truckmanagement/templates/new_trucker.html) | HTML | 20 | 1 | 8 | 29 |
+| [truckmanagement/tests.py](/truckmanagement/tests.py) | Python | 11 | 2 | 2 | 15 |
+| [truckmanagement/urls.py](/truckmanagement/urls.py) | Python | 13 | 0 | 1 | 14 |
+| [truckmanagement/views.py](/truckmanagement/views.py) | Python | 272 | 18 | 53 | 343 |
+| [webpage/\_\_init\_\_.py](/webpage/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [webpage/admin.py](/webpage/admin.py) | Python | 1 | 1 | 2 | 4 |
+| [webpage/apps.py](/webpage/apps.py) | Python | 4 | 0 | 3 | 7 |
+| [webpage/migrations/\_\_init\_\_.py](/webpage/migrations/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [webpage/models.py](/webpage/models.py) | Python | 1 | 1 | 2 | 4 |
+| [webpage/templates/foundation.html](/webpage/templates/foundation.html) | HTML | 23 | 0 | 1 | 24 |
+| [webpage/templates/home.html](/webpage/templates/home.html) | HTML | 43 | 2 | 11 | 56 |
+| [webpage/templates/index.html](/webpage/templates/index.html) | HTML | 21 | 1 | 6 | 28 |
+| [webpage/tests.py](/webpage/tests.py) | Python | 1 | 1 | 2 | 4 |
+| [webpage/urls.py](/webpage/urls.py) | Python | 5 | 0 | 1 | 6 |
+| [webpage/views.py](/webpage/views.py) | Python | 11 | 0 | 1 | 12 |
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
