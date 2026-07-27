@@ -12,7 +12,6 @@ from django.contrib.auth import login
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from EasyOCRCode import EasyOCR_test
 
 import secrets
 
