@@ -13,6 +13,11 @@ from .settings import *  # noqa: F401,F403
 
 DEBUG = False
 
+# settings.py never sets this at all — added here since is_secure()/request
+# scheme detection matters behind the nginx proxy this app is mounted
+# behind (see AWS/nginx/default.conf.template in the portfolio repo).
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 SECRET_KEY = os.environ["DOCKCHAIN_SECRET_KEY"]
 
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get("DOCKCHAIN_ALLOWED_HOSTS", "").split(",") if h.strip()]
